@@ -65,7 +65,8 @@ export default function Header({ activeSection, setActiveSection }: HeaderProps)
 
             {/* login / signup buttons */}
             <div className="flex items-center gap-3">
-              <Link href="/login" className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium transition hover:bg-green-600">
+              <Link href="/login" className=" hidden sm:block px-4 py-2 bg-green-500 text-white rounded-lg font-medium transition hover:scale-105 hover:bg-green-600">
+              
                 Login
               </Link>
               <Link href="/signup" className="hidden sm:block px-4 py-2 bg-blue-600 text-white rounded-lg font-medium transition hover:scale-105 hover:bg-blue-700">

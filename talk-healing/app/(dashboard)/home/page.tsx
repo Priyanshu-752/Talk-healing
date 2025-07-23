@@ -1,85 +1,56 @@
 import React from 'react';
 import Link from 'next/link';
+import Header from '@/app/componenets/Header';
+import TopicsCard from '@/app/componenets/topics';
+import CreatePost from '@/app/componenets/createpost';
+import CommunityExplore from '@/app/componenets/community';
 
-const HomeSection: React.FC = () => {
+
+export default function HomeSection({ }) {
   return (
-    <section className="bg-slate-50 py-20 md:py-32">
-      <div className="container mx-auto px-6 text-center">
-        <div className="flex flex-col items-center">
-          
-          {/* Pulsing Heart Icon */}
-          <div className="mb-6">
-            <div className="relative w-24 h-24 flex items-center justify-center">
-              {/* The pulse animation is applied via the 'animate-pulse-shadow' class */}
-              <div className="absolute inline-flex h-full w-full rounded-full bg-red-100 animate-pulse-shadow"></div>
-              <svg className="relative w-12 h-12 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-            </div>
+    <div className="min-h-screen bg-gray-50">
+      <Header 
+        activeSection={''} 
+        setActiveSection={function (section: 'home' | 'community'): void {
+          throw new Error('Function not implemented.');
+        }} 
+      />
+      <main className="fixed container mx-auto px-24 py-33">
+        <div className="flex gap-8">
+          {/* Left Sidebar */}
+          <div className="w-80 flex-shrink-0">
+            <TopicsCard />
           </div>
-
-          {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900">
-            <span className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-              Talk-Healing
-            </span>
-          </h1>
           
-          <p className="mt-4 text-2xl font-semibold text-slate-700">Healing</p>
-          
-          <p className="mt-6 max-w-3xl text-lg text-slate-600">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link href="/get-started" className="inline-block px-8 py-3 rounded-full bg-red-500 text-white font-semibold text-lg transition-transform hover:scale-105 shadow-md hover:shadow-lg">
-              Lorem
-            </Link>
-            <button className="inline-block px-8 py-3 rounded-full bg-white border-2 border-slate-300 text-slate-700 font-semibold text-lg transition-transform hover:scale-105 hover:bg-slate-50">
-              Learn More
-            </button>
+          {/* Main content area */}
+          <div className="flex-1 flex flex-col gap-7">
+            {/* main content here */}
+            <div className="bg-white rounded-2xl shadow-md p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-3">Welcome to Talkhealing</h2>
+              <p className="text-xl-gray-700">Explore topics, connect with communities, and share your thoughts.</p>
           </div>
-
-          {/* Features Grid */}
-          <div className="mt-20 grid w-full max-w-6xl grid-cols-1 gap-8 text-left md:grid-cols-3">
-            {/* Feature Card 1 */}
-            <div className="transform rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                <svg className="h-8 w-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <h3 className="mb-3 text-xl font-bold text-slate-800">Share Your Experience and Offer Support</h3>
-              <p className="text-slate-600">Share your own experiences, stories, or insights related to your health journey. Support others by offering guidance, encouragement, or sharing resources.</p>
-            </div>
-
-            {/* Feature Card 2 */}
-            <div className="transform rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                <svg className="h-8 w-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                </svg>
-              </div>
-              <h3 className="mb-3 text-xl font-bold text-slate-800">Explore Communities and Connect with Others</h3>
-              <p className="text-slate-600">Browse through various communities related to specific health conditions. Join communities and connect with fellow patients who share similar health experiences.</p>
-            </div>
-
-            {/* Feature Card 3 */}
-            <div className="transform rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100">
-                <svg className="h-8 w-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="mb-3 text-xl font-bold text-slate-800">Stay Informed and Seek Advice</h3>
-              <p className="text-slate-600">Receive updates, news, and valuable information about your health condition and the latest research findings. Feel free to ask questions or seek advice from the community.</p>
-            </div>
-          </div>
-        </div>
+          <div className='bg-white rounded-2xl shadow-md p-6 '>
+            <h2 className='text-xl-black'></h2>
+            <div className="mt-4">
+        <p className="text-gray-800 text-base">
+          Just finished a beautiful hike in the mountains! The air was so fresh and the views were absolutely breathtaking. Feeling so refreshed and grateful for moments like these. 🌲⛰️ #Nature #Hiking #Wellness
+        </p>
+        <img
+          className="mt-4 rounded-lg w-full"
+          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" // Placeholder image
+          alt="Scenic mountain landscape"
+        />
       </div>
-    </section>
+          </div>
+          </div>
+         {/* right sidebar*/}
+          <div className='w-80 flex-shrink-0 flex flex-col gap-7'>
+            <CreatePost/>
+            <CommunityExplore/>
+          </div>
+          
+        </div>
+      </main>
+    </div>
   );
-};
-
-export default HomeSection;
+}

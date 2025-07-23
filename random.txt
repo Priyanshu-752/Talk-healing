@@ -1,0 +1,13 @@
+<div className="flex-1 flex flex-col gap-7">
+  {/* Welcome Card */}
+  <div className="bg-white rounded-2xl shadow-md p-6">
+    <h2 className="text-2xl font-bold text-gray-900 mb-3">Welcome to Talkhealing</h2>
+    <p className="text-xl text-gray-700">Explore topics, connect with communities, and share your thoughts.</p>
+  </div>
+  
+  {/* Second Card */}
+  <div className='bg-white rounded-2xl shadow-md p-6'>
+    <h2 className='text-xl text-black'></h2>
+    {/* Other content for the second card goes here */}
+  </div>
+</div>

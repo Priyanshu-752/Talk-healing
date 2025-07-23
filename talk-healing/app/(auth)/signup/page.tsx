@@ -23,6 +23,7 @@ export default function SignUpSection() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -106,7 +107,7 @@ export default function SignUpSection() {
                     <div className="relative flex items-center">
                         <input
                             id="confirmPassword"
-                            type={showPassword ? 'text' : 'password'}
+                            type={showConfirmPassword ? 'text' : 'password'}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="Confirm your password"
@@ -115,10 +116,10 @@ export default function SignUpSection() {
                         />
                         <button
                             type="button"
-                            onClick={() => setShowPassword(!showPassword)}
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             className="absolute right-3 text-slate-500 hover:text-slate-800 transition-colors"
                         >
-                            {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+                            {showConfirmPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                         </button>
                     </div>
                 </div>

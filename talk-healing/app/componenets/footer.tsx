@@ -11,9 +11,9 @@ export default function Footer (){
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                TH
+                Th
               </div>
-              <span className="font-bold text-xl">Talk-Healing</span>
+              <span className="font-bold text-xl">Talkhealing</span>
             </div>
             <p className="text-gray-400">
               A supportive community for sharing and finding strength in your health journey.
@@ -55,7 +55,7 @@ export default function Footer (){
         
         {/* Footer Bottom */}
         <div className="border-t border-gray-800 pt-8 mt-8 text-center text-gray-400">
-          <p>&copy; 2025 Talk-Healing. All rights reserved.</p>
+          <p>&copy; 2025 Talkhealing. All rights reserved.</p>
         </div>
       </div>
     </footer>
