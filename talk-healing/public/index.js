@@ -75,6 +75,7 @@ default_avatar_image:"./image/default_avatar_image.png",
   talkhealingLogo: "/icons/Talkhealing_svg.svg",
   communityCardImage: "/icons/communityCardimg.svg",
   status_icon:'/image/online_badge.png',
+  worship:'/image/GwcWHOcXEAA8fNs.jpeg',
 }
 
 

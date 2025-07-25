@@ -7,7 +7,7 @@ const CreatePost: React.FC = () => {
   const isPostButtonDisabled = shareText.trim().length === 0;
 
   return (
-    // --- CHANGED: Main container to a light theme ---
+    //  Main container to a light theme ---
     <div className="bg-white text-gray-800 p-4 border border-gray-200 rounded-lg shadow-sm">
       <div className="flex space-x-4">
         {/* Profile Picture (no change) 
@@ -18,7 +18,7 @@ const CreatePost: React.FC = () => {
         />*/}
         
         <div className="flex-1">
-          {/* Textarea (updated placeholder color) */}
+          {/* Textarea  */}
           
           <textarea
             className="bg-transparent w-full focus:outline-none resize-none text-xl placeholder-gray-500"
@@ -28,11 +28,11 @@ const CreatePost: React.FC = () => {
             onChange={(e) => setshareText(e.target.value)}
           />
 
-          {/* --- CHANGED: Divider line to a light theme --- */}
+          {/*Divider line to a light theme --- */}
           <div className="border-t border-gray-200 my-5"></div>
 
           <div className="flex justify-between items-center">
-            {/* --- CHANGED: Icon group to a light theme --- */}
+            {/*  Icon group to a light theme --- */}
             <div className="flex space-x-1 text-blue-500">
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
                 <BsImage size={20} />
@@ -47,7 +47,7 @@ const CreatePost: React.FC = () => {
         
             </div>
 
-            {/* --- CHANGED: Post button to a primary action style --- */}
+            {/*  Post button to a primary action style --- */}
             <button
               className={`px-5 py-2 rounded-full font-bold transition-colors duration-200 ${
                 isPostButtonDisabled
