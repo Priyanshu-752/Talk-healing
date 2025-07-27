@@ -4,6 +4,7 @@ import React from 'react';
 import TopicsCard from '@/app/componenets/topics'; 
 import Header from '@/app/componenets/Header';
 import TopicsMobile from '@/app/componenets/topicsmobile';
+import ResearchCard from '@/app/componenets/researchcard';
 
 export default function ResearchPage({ }) {
   return (
@@ -30,9 +31,12 @@ export default function ResearchPage({ }) {
               placeholder="Search research..."
             />
           </div>
-          
-      </div>
+          <ResearchCard/>
+          <ResearchCard/>
+          <ResearchCard/>
+          <ResearchCard/>
 
+      </div>
       </div>
       </div>
   );
