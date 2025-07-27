@@ -5,21 +5,17 @@ import { BiPoll } from 'react-icons/bi';
 const CreatePost: React.FC = () => {
   const [shareText, setshareText] = useState('');
   const isPostButtonDisabled = shareText.trim().length === 0;
+  const [selectedCategory, setSelectedCategory] = useState('Public');
+  const categories = ['Public', 'Private'];
 
   return (
-    //  Main container to a light theme ---
     <div className="bg-white text-gray-800 p-4 border border-gray-200 rounded-lg shadow-sm">
       <div className="flex space-x-4">
-        {/* Profile Picture (no change) 
-        <img
-          src="https://via.placeholder.com/150"
-          alt="Profile Avatar"
-          className="w-12 h-12 rounded-full"
-        />*/}
+        {/* Profile Picture placeholder 
+        <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0"></div>*/}
         
         <div className="flex-1">
-          {/* Textarea  */}
-          
+          {/* Textarea */}
           <textarea
             className="bg-transparent w-full focus:outline-none resize-none text-xl placeholder-gray-500"
             placeholder="Share your thoughts..."
@@ -28,26 +24,48 @@ const CreatePost: React.FC = () => {
             onChange={(e) => setshareText(e.target.value)}
           />
 
-          {/*Divider line to a light theme --- */}
+          {/* Divider line */}
           <div className="border-t border-gray-200 my-5"></div>
 
+          {/* Section with icons and dropdown */}
           <div className="flex justify-between items-center">
-            {/*  Icon group to a light theme --- */}
+            {/* Icon group */}
             <div className="flex space-x-1 text-blue-500">
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
                 <BsImage size={20} />
               </button>
-              
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
                 <BiPoll size={20} />
               </button>
               <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
                 <BsEmojiSmile size={20} />
               </button>
-        
             </div>
 
-            {/*  Post button to a primary action style --- */}
+            {/* Right side with dropdown */}
+            <div className="flex items-center">
+              {/* Category Dropdown */}
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="bg-gray-50 border border-gray-300 rounded-lg py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider line before post button */}
+          <div className="border-t border-gray-200 my-4"></div>
+
+          {/* Post button section */}
+          <div className="flex justify-end">
             <button
               className={`px-5 py-2 rounded-full font-bold transition-colors duration-200 ${
                 isPostButtonDisabled

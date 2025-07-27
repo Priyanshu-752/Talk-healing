@@ -23,7 +23,9 @@ export default function Header() {
               {isMobileMenuOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
             </button>
             {/* Logo */}
+            <Link href="/home" >
             <h1 className="text-2xl font-bold text-black">Talkhealing</h1>
+            </Link>
           </div>
 
           {/* Desktop Nav */}
@@ -43,6 +45,14 @@ export default function Header() {
               }`}
             >
               Community
+            </Link>
+            <Link
+              href="/research"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                pathname === '/research' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              Research
             </Link>
           </div>
 
@@ -93,15 +103,24 @@ export default function Header() {
               Community
             </Link>
             <Link
+              href="/research"
+              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                pathname === '/research' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:text-blue-600'
+              }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Research
+            </Link>
+            <Link
               href="/login"
-              className="block px-3 py-2 bg-green-500 text-white rounded-lg font-medium"
+              className="block text-center px-3 py-2 bg-green-500 text-white rounded-lg font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Login
             </Link>
             <Link
               href="/signup"
-              className="block px-3 py-2 bg-blue-600 text-white rounded-lg font-medium"
+              className="block text-center px-3 py-2 bg-blue-600 text-white rounded-lg font-medium"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Sign Up

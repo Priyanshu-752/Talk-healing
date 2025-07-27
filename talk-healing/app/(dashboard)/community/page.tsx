@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Header from '@/app/componenets/Header';
-import TopicsCard from '@/app/componenets/topics';
 import CommunityCards from '@/app/componenets/communitycards';
 
 export default function CommunityPage() {

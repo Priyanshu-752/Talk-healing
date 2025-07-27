@@ -2,7 +2,6 @@ import React from 'react';
 import { FaRegComment, FaRetweet } from 'react-icons/fa';
 import { IoHeartOutline, IoStatsChartOutline, IoShareOutline } from 'react-icons/io5';
 import { FiMoreHorizontal } from 'react-icons/fi';
-import Image from 'next/image';
 import { Images } from '@/public';
 
 export default function PostCard() {
