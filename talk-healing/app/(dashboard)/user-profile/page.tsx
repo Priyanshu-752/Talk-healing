@@ -2,11 +2,9 @@
 
 import React from 'react';
 import Header from '@/app/componenets/Header';
-import TopicsCard from '@/app/componenets/topics';
-import CreatePost from '@/app/componenets/createpost';
-import CommunityExplore from '@/app/componenets/community';
-import PostCard from '@/app/componenets/postcard';
-import TopicsMobile from '@/app/componenets/topicsmobile';
+import ProfileCard from '@/app/componenets/profilecard';
+import SettingsCard from '@/app/componenets/settingscard';
+
 
 export default function HomeSection({ }) {
   return (
@@ -18,12 +16,9 @@ export default function HomeSection({ }) {
       <div className="flex flex-1 h-screen pt-[140px] md:pt-[70px] overflow-hidden ">
 
         {/* Left Sidebar - Fixed position */}
-
-        <div className="w-full md:hidden block md:w-64 lg:w-80 px-4 flex-shrink-0 absolute top-[100px] left-0 right-0 h-auto z-10 bg-gray-50 ">
-          <TopicsMobile />
-        </div> 
+ 
         <div className="w-full md:block hidden md:w-64 lg:w-90 px-8 flex-shrink-0 fixed top-[110px] left-0 h-[calc(100vh-110px)] overflow-y-auto  z-10">
-          <TopicsCard />
+          <ProfileCard />
         </div>
 
         {/* Main Content - Scrollable with proper margins */}
@@ -35,11 +30,11 @@ export default function HomeSection({ }) {
         */}
           {/* CreatePost visible only on mobile */}
           <div className="block md:hidden mt-0">
-            <CreatePost />
+            <SettingsCard />
           </div>
 
           {/* Post Cards */}
-          <PostCard />
+          
           
         </div>
 
@@ -47,13 +42,10 @@ export default function HomeSection({ }) {
         <div className="w-full md:w-64 lg:w-80 px-4 flex-shrink-0 fixed top-[110px] right-5 h-[calc(100vh-110px)] overflow-y-auto bg-gray-50 z-10 hidden md:flex md:flex-col gap-7 ">
           {/* CreatePost visible only on md and up */}
           <div className="block">
-            <CreatePost />
+            <SettingsCard />
           </div>
 
-          {/* CommunityExplore only visible on md and up */}
-          <div className="block">
-            <CommunityExplore />
-          </div>
+          
         </div>
 
       </div>

@@ -2,9 +2,14 @@
 
 import React from 'react';
 import Header from '@/app/componenets/Header';
+import { useState } from 'react';
 import CommunityCards from '@/app/componenets/communitycards';
+import CreateCommunityModal from '@/app/componenets/Modals/CreateCommunity/CreateCommunityModal';
+import { Dialog } from '@/components/ui/dialog';
+import UserProfileSection from '../user-profile/page';
 
 export default function CommunityPage() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
@@ -23,9 +28,7 @@ export default function CommunityPage() {
               placeholder="Search community..."
             />
             {/* Create Button */}
-            <button className="px-4 py-2 bg-green-500 text-white rounded-full font-medium transition hover:scale-105 hover:bg-green-600">
-              Create Community
-            </button>
+            <CreateCommunityModal/>
           </div>
 
           {/* Community Cards Grid */}
@@ -38,6 +41,7 @@ export default function CommunityPage() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

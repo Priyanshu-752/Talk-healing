@@ -54,6 +54,14 @@ export default function Header() {
             >
               Research
             </Link>
+            <Link
+              href="/user-profile"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                pathname === '/user-profile' ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:text-blue-600'
+              }`}
+            >
+              user-p
+            </Link>
           </div>
 
           {/* Search and Right Section */}
@@ -63,6 +71,7 @@ export default function Header() {
               type="text"
               placeholder="Search..."
             />
+            
             <button className="p-2 rounded-full hover:bg-gray-200">
               <IconBell className="h-6 w-6 text-gray-600" />
             </button>

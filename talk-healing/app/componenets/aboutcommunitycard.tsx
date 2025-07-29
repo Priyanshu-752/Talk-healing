@@ -1,4 +1,5 @@
 import React from 'react';
+import CreatePostModal from './Modals/CreatePost/CreatePostModal';
 
 interface AboutCommunityCardProps {
   communityName: string;
@@ -53,11 +54,7 @@ export default function AboutCommunityCard({
         <span className="text-gray-600 text-sm">100+Members</span>
         
       </div>
-      <div><button
-              className={"px-28 mt-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:scale-105 hover:bg-blue-700"}
-            >
-              Post
-            </button></div>
+      <div><CreatePostModal/></div>
     </div>
   );
 }

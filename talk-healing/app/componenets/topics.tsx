@@ -79,6 +79,11 @@ const topics = [
     url: "#",
     icon: RibbonIcon,
   },
+  {
+    title: "Cardiac Arrest",
+    url: "#",
+    icon: RibbonIcon,
+  },
 ]
 
 export function TopicsCard() {
