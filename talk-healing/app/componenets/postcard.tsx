@@ -8,7 +8,7 @@ export default function PostCard() {
   return (
     <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl max-w mx-auto my-4 font-sans">
       <div className="p-4">
-        <div className="flex items-start justify-between">
+        <div className=" items-start justify-between">
           {/* User Info Section */}
           <div className="flex items-center gap-3">
             <img 
@@ -27,15 +27,16 @@ export default function PostCard() {
         </div>
 
         {/* Post Content */}
-        <div className="mt-4">
-          <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-             <img 
-              src={Images.bottom_border_icon}
-              alt="post"
-              className="w-full h-auto"
-            />
-          </div>
-        </div>
+        <div className="mt-4 flex justify-center">
+  <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden max-w-full">
+    <img 
+      src={Images.userProfileImage}
+      alt="post"
+      className="rounded-2xl max-h-[650px] object-cover"
+    />
+  </div>
+</div>
+
 
         {/* Action Bar */}
         <div className="flex justify-between items-center mt-4 text-gray-500">
@@ -100,15 +101,16 @@ export default function PostCard() {
               </div>
       
               {/* Post Content */}
-              <div className="mt-4">
-                <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-                   <img 
-                    src={Images.worship}
-                    alt="post"
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
+              <div className="mt-4 flex justify-center">
+  <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden max-w-full">
+    <img 
+      src={Images.talkhealingLogo}
+      alt="post"
+      className="rounded-2xl max-h-[650px] object-cover"
+    />
+  </div>
+</div>
+
       
               {/* Action Bar */}
               <div className="flex justify-between items-center mt-4 text-gray-500">
@@ -173,15 +175,16 @@ export default function PostCard() {
                     </div>
             
                     {/* Post Content */}
-                    <div className="mt-4">
-                      <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-                         <img 
-                          src={Images.userProfileImage}
-                          alt="post"
-                          className=" w-auto h-auto"
-                        />
-                      </div>
-                    </div>
+                    <div className="mt-4 flex justify-center">
+  <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden max-w-full">
+    <img 
+      src={Images.worship}
+      alt="post"
+      className="rounded-2xl max-h-[650px] object-cover"
+    />
+  </div>
+</div>
+
             
                     {/* Action Bar */}
                     <div className="flex justify-between items-center mt-4 text-gray-500">
