@@ -11,11 +11,11 @@ export default function SettingsCard() {
 
   return (
     <div className="bg-white rounded-2xl shadow-md  p-6">
-      <h1 className="text-4xl font-bold mb-4">My Profile</h1>
+      <h1 className="text-4xl font-bold mb-4">Settings</h1>
 
       {/* Tabs */}
       <div className="flex gap-8 text-lg font-medium mb-3">
-        <span className="text-black border-b-2 border-black pb-1">Settings</span>
+        <span className="text-black border-b-2 border-black pb-1">Account State</span>
       </div>
 
       {/* Action Buttons */}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useKBar } from 'kbar';
 import { useState } from 'react';
 import { IconBell, IconMenu2, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import NotificationModal from './Modals/Notification/NotificationModal';
 export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { query } = useKBar();
 
   return (
     <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
@@ -54,7 +56,9 @@ export default function Header() {
           {/* Right - Search & Actions */}
           <div className="hidden lg:flex items-center gap-6">
             <input
-              className="px-4 py-2 w-80 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              readOnly
+              onClick={() => query.toggle()}
+              className="px-4 py-2 w-80 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
               type="text"
               placeholder="Search..."
             />
@@ -96,9 +100,11 @@ export default function Header() {
               </Link>
             ))}
 
-            {/* Optional Search Bar in Mobile */}
+            {/* Mobile Search */}
             <input
-              className="block w-full px-4 py-2 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              readOnly
+              onClick={() => query.toggle()}
+              className="block w-full px-4 py-2 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
               type="text"
               placeholder="Search..."
             />

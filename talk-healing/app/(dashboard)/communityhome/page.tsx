@@ -70,7 +70,7 @@ export default function CommunityHomePage() {
                             <div className="mt-6 space-y-6">
                                 <PostCard />
                                 <PostCard />
-                                <PostCard2 />
+                            
                             </div>
                         </div>
                     </div>
