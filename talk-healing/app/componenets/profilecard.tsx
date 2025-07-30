@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import CreatePostModal from './Modals/CreatePost/CreatePostModal';
 
 export default function ProfileCard() {
