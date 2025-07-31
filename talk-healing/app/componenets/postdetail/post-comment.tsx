@@ -4,6 +4,8 @@ import { IoHeartOutline, IoStatsChartOutline, IoShareOutline } from 'react-icons
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { Images } from '@/public';
 import Link from 'next/link';
+import ActionBar from '../actionbar/actionbar';
+
 
 export default function PostComment() {
     // Sample comments data
@@ -146,52 +148,6 @@ export default function PostComment() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    );
-}
-
-// Action bar component
-function ActionBar() {
-    return (
-        <div className="flex justify-between items-center text-gray-500">
-            {/* Reply */}
-            <div className="flex items-center gap-1 group">
-                <button className="p-2 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/20 rounded-full transition-colors">
-                    <FaRegComment size={18} className="group-hover:text-blue-500" />
-                </button>
-                <span className="text-sm group-hover:text-blue-500">900</span>
-            </div>
-
-            {/* Retweet */}
-            <div className="flex items-center gap-1 group">
-                <button className="p-2 group-hover:bg-green-100 dark:group-hover:bg-green-900/20 rounded-full transition-colors">
-                    <FaRetweet size={18} className="group-hover:text-green-500" />
-                </button>
-                <span className="text-sm group-hover:text-green-500">4960</span>
-            </div>
-
-            {/* Like */}
-            <div className="flex items-center gap-1 group">
-                <button className="p-2 group-hover:bg-pink-100 dark:group-hover:bg-pink-900/20 rounded-full transition-colors">
-                    <IoHeartOutline size={20} className="group-hover:text-pink-500" />
-                </button>
-                <span className="text-sm group-hover:text-pink-500">9.2K</span>
-            </div>
-
-            {/* Views */}
-            <div className="flex items-center gap-1 group">
-                <button className="p-2 group-hover:bg-gray-200 dark:group-hover:bg-gray-800 rounded-full transition-colors">
-                    <IoStatsChartOutline size={20} className="group-hover:text-gray-700 dark:group-hover:text-white" />
-                </button>
-                <span className="text-sm group-hover:text-gray-700 dark:group-hover:text-white">29K</span>
-            </div>
-
-            {/* Share */}
-            <div>
-                <button className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-full hover:text-blue-500 transition-colors">
-                    <IoShareOutline size={20} />
-                </button>
             </div>
         </div>
     );

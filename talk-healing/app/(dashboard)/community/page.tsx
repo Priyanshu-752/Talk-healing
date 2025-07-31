@@ -25,7 +25,7 @@ export default function CommunityPage() {
               type="text"
               placeholder="Search community..."
             />
-            <CreateCommunityModal />
+            <CreateCommunityModal onClose={() => setShowModal(false)} />
           </div>
 
           {/* Community Cards Grid */}

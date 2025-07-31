@@ -5,21 +5,17 @@ import Link from 'next/link';
 
 export default function CommunityCards({
   title = "Community",
-  image,
+  image = Images.communityCardImage,
   members = "1000+",
   showButtons = true,
   
-}: {
-  title: string;
-  image: string;
-  members?: string;
-  showButtons?: boolean;
 }) {
   return (
     
     <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl font-sans hover:shadow-lg transition">
       <div className="p-4">
         <Link href="/communityhome" className="block">
+        
         {/* Image */}
         <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
           <img src={Images.communityCardImage} alt={`${title} card`} className="w-full object-cover h-40" />
