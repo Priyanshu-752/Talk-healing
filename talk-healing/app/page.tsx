@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import HomeSection from './(dashboard)/home/page';
 import LandingPage from './(dashboard)/landingpage/page';
-import TopicsCard from './componenets/topics';
+import TopicsCard from './componenets/topicscards/topics';
 
 
 export default function page(main) {

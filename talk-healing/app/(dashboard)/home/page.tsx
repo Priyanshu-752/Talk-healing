@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import Header from '@/app/componenets/Header';
-import TopicsCard from '@/app/componenets/topics';
-import CreatePost from '@/app/componenets/createpost';
-import CommunityExplore from '@/app/componenets/community';
+import Header from '@/app/componenets/Header/Header';
+import TopicsCard from '@/app/componenets/topicscards/topics';
+import CreatePost from '@/app/componenets/createpost/createpost';
+import CommunityExplore from '@/app/componenets/communitycards/community';
 import PostCard from '@/app/componenets/postcard';
-import TopicsMobile from '@/app/componenets/topicsmobile';
+import TopicsMobile from '@/app/componenets/topicscards/topicsmobile';
 
 export default function HomeSection({ }) {
   return (

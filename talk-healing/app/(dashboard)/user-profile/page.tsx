@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import Header from '@/app/componenets/Header';
-import ProfileCard from '@/app/componenets/profilecard';
-import SettingsCard from '@/app/componenets/settingscard';
-import UserProfileActivityTab from '@/app/componenets/userprofiletabs';
+import Header from '@/app/componenets/Header/Header';
+import ProfileCard from '@/app/componenets/User-profilepage/profilecard';
+import SettingsCard from '@/app/componenets/User-profilepage/settingscard';
+import UserProfileActivityTab from '@/app/componenets/User-profilepage/userprofiletabs';
 
 export default function UserProfilePage() {
   return (

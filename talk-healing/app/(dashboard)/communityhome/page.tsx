@@ -1,11 +1,11 @@
 'use client';
 import React from "react";
-import Header from "@/app/componenets/Header";
+import Header from "@/app/componenets/Header/Header";
 import { Button } from "@/components/ui/button";
 import { IconBell } from '@tabler/icons-react';
-import AboutCommunityCard from "@/app/componenets/aboutcommunitycard";
+import AboutCommunityCard from "@/app/componenets/communitycards/aboutcommunitycard";
 import PostCard from "@/app/componenets/postcard";
-import PostCard2 from "@/app/componenets/postcard2";
+
 
 export default function CommunityHomePage() {
     return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import CreatePostModal from './Modals/CreatePost/CreatePostModal';
+import CreatePostModal from '../Modals/CreatePost/CreatePostModal';
 
 interface AboutCommunityCardProps {
   communityName: string;

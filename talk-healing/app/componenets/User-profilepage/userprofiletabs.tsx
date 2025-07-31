@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import PostCard from "./postcard";
+import PostCard from "../postcard";
 import CommentCard from "./commentcard";
 
 export default function UserProfileActivityTab({ }) {

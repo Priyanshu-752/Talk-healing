@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import CreatePostModal from './Modals/CreatePost/CreatePostModal';
+import CreatePostModal from '../Modals/CreatePost/CreatePostModal';
 
 export default function ProfileCard() {
   return (

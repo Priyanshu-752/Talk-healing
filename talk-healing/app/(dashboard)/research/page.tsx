@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import TopicsCard from '@/app/componenets/topics'; 
-import Header from '@/app/componenets/Header';
-import TopicsMobile from '@/app/componenets/topicsmobile';
-import ResearchCard from '@/app/componenets/researchcard';
+import TopicsCard from '@/app/componenets/topicscards/topics'; 
+import Header from '@/app/componenets/Header/Header';
+import TopicsMobile from '@/app/componenets/topicscards/topicsmobile';
+import ResearchCard from '@/app/componenets/researchcard/researchcard';
 
 export default function ResearchPage({ }) {
   return (

@@ -54,7 +54,7 @@ const RelatedPostCard: React.FC<TrendingCardProps> = ({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl max-w-sm mx-auto overflow-hidden shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-2xl max-w-sm mx-1 overflow-hidden shadow-sm">
       {/* Header */}
       <div className="px-4 py-3 border-b border-gray-200">
         <div className="flex items-center justify-between">

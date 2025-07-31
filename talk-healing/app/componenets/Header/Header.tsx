@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { IconBell, IconMenu2, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import NotificationModal from './Modals/Notification/NotificationModal';
+import NotificationModal from '../Modals/Notification/NotificationModal';
 
 export default function Header() {
   const pathname = usePathname();

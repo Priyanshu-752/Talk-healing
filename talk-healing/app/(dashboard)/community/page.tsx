@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import Header from '@/app/componenets/Header';
-import CommunityCards from '@/app/componenets/communitycards';
+import Header from '@/app/componenets/Header/Header';
+import CommunityCards from '@/app/componenets/communitycards/communitycards';
 import CreateCommunityModal from '@/app/componenets/Modals/CreateCommunity/CreateCommunityModal';
 
 export default function CommunityPage() {

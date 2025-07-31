@@ -35,6 +35,7 @@ export default function PostCard() {
             />
           </div>
         </div>
+         <div className='border-t border-gray-200 my-4'></div>
         <ActionBar />
         </Link>
       </div>
@@ -65,7 +66,7 @@ export default function PostCard() {
             />
           </div>
         </div>
-
+ <div className='border-t border-gray-200 my-4'></div>
         <ActionBar />
       </div>
 
@@ -95,7 +96,7 @@ export default function PostCard() {
             />
           </div>
         </div>
-
+ <div className='border-t border-gray-200 my-4'></div>
         <ActionBar />
       </div>
 
