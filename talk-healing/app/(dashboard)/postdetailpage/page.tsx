@@ -9,7 +9,7 @@ import RelatedPostCard from '@/app/componenets/postdetail/relatedpost';
 export default function PostDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      {/* Header - Fixed at top */}
+      {/* Header*/}
       <Header />
 
       {/* Main content wrapper */}

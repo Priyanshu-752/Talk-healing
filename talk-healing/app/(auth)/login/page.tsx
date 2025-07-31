@@ -51,8 +51,8 @@ export default function LoginSection() {
         
         <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg overflow-hidden w-full max-w-4xl min-h-[600px]">
           
-          {/* Left side: Image */}
-          {/* Hidden on small screens (mobile-first), shown on medium screens and up */}
+          {/* Left side-image */}
+      
           <div className="hidden md:flex flex-1 bg-slate-100 justify-center items-center p-0">
             <Image
               src={Images.public_health}
@@ -63,14 +63,14 @@ export default function LoginSection() {
             />
           </div>
 
-          {/* Right side: Login Form */}
+          {/* Right side-Login Form */}
           <div className="flex-1 flex justify-center items-center p-6 sm:p-10 lg:p-12">
             <form onSubmit={handleSubmit} className='w-full max-w-sm flex flex-col gap-6'>
               <h2 className="text-3xl font-semibold text-center text-slate-900 mb-6">
                 Login to your account
               </h2>
 
-              {/* Social Login Buttons */}
+              {/* Login Buttons */}
               <div className="flex justify-center gap-4 mb-4">
                 <button type="button" className="w-12 h-12 bg-white border border-slate-300 rounded-full flex items-center justify-center cursor-pointer transition-all hover:-translate-y-px hover:shadow-md">
                     <GoogleIcon />

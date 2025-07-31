@@ -9,10 +9,10 @@ import ResearchCard from '@/app/componenets/researchcard/researchcard';
 export default function ResearchPage({ }) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header - Fixed at top */}
+      {/* Header  */}
       <Header />
       
-      {/* Main content wrapper - Fixed height with flex */}
+      {/* Main content wrapper */}
       <div className="flex flex-1 h-screen pt-[140px] md:pt-[89px] overflow-hidden">
         <div className="w-full md:hidden block md:w-64 lg:w-80 px-4 flex-shrink-0 absolute top-[100px] left-0 right-0 h-auto z-10 bg-gray-50">
                   <TopicsMobile />
@@ -21,7 +21,7 @@ export default function ResearchPage({ }) {
                   <TopicsCard />
                 </div>
 
-                {/* Main Content - Scrollable with proper margins */}
+                {/* Main Content - Scrollable */}
         <div className="flex-1 px-4 py-6 md:pt[90px] md:px-8 md:py-6 md:ml-94 lg:ml-80 md:mr-64 lg:mr-0 overflow-y-auto space-y-7 scrollbar-none">
           <div className="bg-white rounded-2xl shadow-md p-3 flex flex-row gap-152">
             <h2 className="text-2xl font-bold text-gray-900 mb-3">Latest Research</h2>

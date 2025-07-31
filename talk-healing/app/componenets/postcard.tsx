@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ActionBar from './actionbar/actionbar';
 
 export default function PostCard({ posts = [] }) {
-  // Default fallback data if no posts provided
+
   const defaultPosts = [
     {
       id: 1,
@@ -84,7 +84,7 @@ export default function PostCard({ posts = [] }) {
             
           </div>
           
-          {/* Add divider between posts, but not after the last one */}
+         
           {index < postsToRender.length - 1 && (
             <div className="border-t border-gray-200 my-4"></div>
           )}

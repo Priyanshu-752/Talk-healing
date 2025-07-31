@@ -22,7 +22,7 @@ export default function TopicsMobile() {
   return (
     <div className="relative w-full max-w-full px-2">
       <Carousel className="relative w-full">
-        {/* Carousel Buttons (Centered Vertically & Closer) */}
+        {/* Carousel Buttons*/}
         <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 z-10" />
         <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 z-10" />
 

@@ -8,7 +8,7 @@ import ActionBar from '../actionbar/actionbar';
 
 
 export default function PostComment() {
-    // Sample comments data
+   
     const comments = [
         {
             id: 1,

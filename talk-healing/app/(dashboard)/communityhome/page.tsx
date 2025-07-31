@@ -32,7 +32,7 @@ export default function CommunityHomePage() {
                             </div>
                         </div>
 
-                        {/* ✅ AboutCommunityCard shown only on mobile below header */}
+                        {/* AboutCommunityCard shown only on mobile  */}
                         <div className="block md:hidden mb-6">
                             <AboutCommunityCard />
                         </div>
@@ -76,7 +76,7 @@ export default function CommunityHomePage() {
                     </div>
                 </div>
 
-                {/* Sidebar - AboutCommunityCard (Desktop only) */}
+                {/*  AboutCommunityCard (Desktop only) */}
                 <div className="hidden md:flex md:flex-col w-80 lg:w-84 px-4 py-6 bg-gray-50 flex-shrink-0">
                     <div className="w-full md:w-64 lg:w-80 px-4 flex-shrink-0 fixed top-[110px] right-5 h-[calc(100vh-110px)] overflow-y-auto bg-gray-50 z-10 hidden md:flex md:flex-col gap-7">
                         <AboutCommunityCard />

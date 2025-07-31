@@ -61,10 +61,10 @@ const CreatePost: React.FC = () => {
             </div>
           </div>
 
-          {/* Divider line before post button */}
+          
           <div className="border-t border-gray-200 my-4"></div>
 
-          {/* Post button section */}
+          {/* Post button  */}
           <div className="flex justify-end">
             <button
               className={`px-5 py-2 rounded-full font-bold transition-colors duration-200 ${

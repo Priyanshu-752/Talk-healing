@@ -63,7 +63,7 @@ export default function CreateCommunityModal({ onClose }: { onClose: () => void 
                 : 'bg-blue-500 text-white hover:bg-blue-600'
             }`}
             disabled={isPostButtonDisabled}
-            onClick={onClose}  // Call onClose on click; you might want to handle create logic first!
+            onClick={onClose}  
           >
             Create
           </Button>

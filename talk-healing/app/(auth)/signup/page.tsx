@@ -36,7 +36,7 @@ export default function SignUpSection() {
         <div className="flex justify-center items-center min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
         
         <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg overflow-hidden w-full max-w-4xl min-h-[600px]">
-            {/*left imagesection*/}
+            {/*left image*/}
             <div className='hidden md:flex flex-1 bg-slate-100 justify-center items-center p-0'>
                 <Image 
                 src={Images.public_health}

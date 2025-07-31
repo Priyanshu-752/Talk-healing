@@ -9,7 +9,7 @@ export default function ActionBar() {
   const [retweetCount, setRetweetCount] = useState(4960);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(9200);
-  // (Optionally add more state if you want to handle views or replies)
+  
 
   // Button handlers
   const handleLike = () => {
@@ -22,13 +22,13 @@ export default function ActionBar() {
   };
 
   const handleReply = () => {
-    // For demo: just increment, in real app open a reply modal
+   
     setReplyCount(replyCount + 1);
     alert('Reply clicked!');
   };
 
   const handleShare = () => {
-    // Expand this in real apps: share modal, copy link etc.
+   
     alert('Share clicked!');
   };
 
@@ -71,7 +71,7 @@ export default function ActionBar() {
         <span className="text-sm group-hover:text-pink-500">{likeCount.toLocaleString()}</span>
       </div>
 
-      {/* Views (static here) */}
+      {/* Views  */}
       <div className="flex items-center gap-1 group">
         <button className="p-2 group-hover:bg-gray-200 dark:group-hover:bg-gray-800 rounded-full" disabled>
           <IoStatsChartOutline size={20} className="group-hover:text-gray-700 dark:group-hover:text-white" />
