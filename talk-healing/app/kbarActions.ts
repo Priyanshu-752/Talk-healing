@@ -15,13 +15,34 @@ export const actions: Action[] = [
     shortcut: ["r"],
     keywords: "Latest Research",
     perform: () => (window.location.href = "/research"),
-  },
-  {
+  },{
     id: "community",
-    name: "Community",
-    shortcut: ["c"],
+    name: "Communities",
+    shortcut: [""],
     keywords: "communities",
     perform: () => (window.location.href = "/community"),
+  },
+ 
+   {
+    id: "communityhome",
+    name: "Community Home Page",
+    shortcut: [""],
+    keywords: "communities",
+    perform: () => (window.location.href = "/communityhome"),
+  },
+  {
+    id: "login",
+    name: "Login ",
+    shortcut: [""],
+    keywords: "login",
+    perform: () => (window.location.href = "/login"),
+  },
+  {
+    id: "signup",
+    name: "Sign Up",
+    shortcut: [""],
+    keywords: "signup",
+    perform: () => (window.location.href = "/signup"),
   },
   
 ];

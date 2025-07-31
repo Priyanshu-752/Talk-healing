@@ -1,39 +1,79 @@
-"use client"
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { FaRegComment, FaRetweet } from 'react-icons/fa';
-import { IoHeartOutline, IoStatsChartOutline, IoShareOutline } from 'react-icons/io5';
+import { IoHeartOutline, IoHeart, IoStatsChartOutline, IoShareOutline } from 'react-icons/io5'; // Import IoHeart for toggled like
 import { FiMoreHorizontal } from 'react-icons/fi';
 
 export default function ActionBar() {
+  const [replyCount, setReplyCount] = useState(900);
+  const [retweetCount, setRetweetCount] = useState(4960);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(9200);
+  // (Optionally add more state if you want to handle views or replies)
+
+  // Button handlers
+  const handleLike = () => {
+    setLikeCount(likeCount + (liked ? -1 : 1));
+    setLiked(!liked);
+  };
+
+  const handleRetweet = () => {
+    setRetweetCount(retweetCount + 1);
+  };
+
+  const handleReply = () => {
+    // For demo: just increment, in real app open a reply modal
+    setReplyCount(replyCount + 1);
+    alert('Reply clicked!');
+  };
+
+  const handleShare = () => {
+    // Expand this in real apps: share modal, copy link etc.
+    alert('Share clicked!');
+  };
+
   return (
     <div className="flex justify-between items-center mt-4 text-gray-500">
       {/* Reply */}
       <div className="flex items-center gap-1 group">
-        <button className="p-2 group-hover:bg-blue-100 rounded-full">
+        <button
+          className="p-2 group-hover:bg-blue-100 rounded-full"
+          onClick={handleReply}
+        >
           <FaRegComment size={18} className="group-hover:text-blue-500" />
         </button>
-        <span className="text-sm group-hover:text-blue-500">900</span>
+        <span className="text-sm group-hover:text-blue-500">{replyCount.toLocaleString()}</span>
       </div>
 
       {/* Retweet */}
       <div className="flex items-center gap-1 group">
-        <button className="p-2 group-hover:bg-green-100 rounded-full">
+        <button
+          className="p-2 group-hover:bg-green-100 rounded-full"
+          onClick={handleRetweet}
+        >
           <FaRetweet size={18} className="group-hover:text-green-500" />
         </button>
-        <span className="text-sm group-hover:text-green-500">4960</span>
+        <span className="text-sm group-hover:text-green-500">{retweetCount.toLocaleString()}</span>
       </div>
 
       {/* Like */}
       <div className="flex items-center gap-1 group">
-        <button className="p-2 group-hover:bg-pink-100 rounded-full">
-          <IoHeartOutline size={20} className="group-hover:text-pink-500" />
+        <button
+          className="p-2 group-hover:bg-pink-100 rounded-full"
+          onClick={handleLike}
+        >
+          {liked ? (
+            <IoHeart size={20} className="text-pink-500" />
+          ) : (
+            <IoHeartOutline size={20} className="group-hover:text-pink-500" />
+          )}
         </button>
-        <span className="text-sm group-hover:text-pink-500">9.2K</span>
+        <span className="text-sm group-hover:text-pink-500">{likeCount.toLocaleString()}</span>
       </div>
 
-      {/* Views */}
+      {/* Views (static here) */}
       <div className="flex items-center gap-1 group">
-        <button className="p-2 group-hover:bg-gray-200 dark:group-hover:bg-gray-800 rounded-full">
+        <button className="p-2 group-hover:bg-gray-200 dark:group-hover:bg-gray-800 rounded-full" disabled>
           <IoStatsChartOutline size={20} className="group-hover:text-gray-700 dark:group-hover:text-white" />
         </button>
         <span className="text-sm group-hover:text-gray-700 dark:group-hover:text-white">29K</span>
@@ -41,10 +81,13 @@ export default function ActionBar() {
 
       {/* Share */}
       <div>
-        <button className="p-2 hover:bg-blue-100 rounded-full hover:text-blue-500">
+        <button
+          className="p-2 hover:bg-blue-100 rounded-full hover:text-blue-500"
+          onClick={handleShare}
+        >
           <IoShareOutline size={20} />
         </button>
       </div>
     </div>
   );
-};
+}
