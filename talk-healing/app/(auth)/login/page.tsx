@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image'; 
 import ForgotPasswordDialog from '@/app/componenets/forgotpassword/forgotpass';
 import { Images } from '@/public';
+import { useRouter } from 'next/navigation';
+
 
 // ICON COMPONENTS
 const GoogleIcon = () => (
@@ -36,6 +38,8 @@ const EyeClosedIcon = () => (
 );
 
 export default function LoginSection() {
+  const router = useRouter();
+ 
   // ALL Hooks are here, inside the function!
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
