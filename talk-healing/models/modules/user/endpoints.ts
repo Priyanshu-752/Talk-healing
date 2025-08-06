@@ -1,5 +1,5 @@
-import { API_ENDPOINT, REQUEST_METHOD } from "../../api/endpoint.types"
-import * as SCHEMAS from "./schemas"
+import { API_ENDPOINT, REQUEST_METHOD } from "../../api/endpoint.types";
+
 const TRANSFORMERS = {
     referralSource: (data:Record<string,any>) => ({
         ...data,
@@ -22,8 +22,9 @@ const TRANSFORMERS = {
         user: TRANSFORMERS.userTransformer(data.user),
     }),
 }
- export const API_ENDPOINTS = {
-    registerUser: new API_ENDPOINT({
+ 
+export const API_ENDPOINTS = {
+    registration: new API_ENDPOINT({
         url: "/auth/registration/",
         method: REQUEST_METHOD.POST,
         response: null,
@@ -33,30 +34,46 @@ const TRANSFORMERS = {
         url: "/auth/login/",
         method: REQUEST_METHOD.POST,
         response: null,
-        transformer: TRANSFORMERS.userPaginatedTransformer,
+        transformer: null,
     }),
-    verifyEmail: new API_ENDPOINT({
-        url: "/auth/registration/verify-email/",
-        method: REQUEST_METHOD.POST,
-        response: null,
-        transformer: TRANSFORMERS.userPaginatedTransformer,
-    }),
-
-    resendVerificationEmail: new API_ENDPOINT({
-        url: "/base_user/verify-email/resend/",
-        method: REQUEST_METHOD.GET,
-        response: null,
-        transformer: TRANSFORMERS.userPaginatedTransformer,
-    }),
-    
-    createPassword: new API_ENDPOINT({
-        url: "/auth/create-password/",
+    logoutUser: new API_ENDPOINT({
+        url: "/auth/logout/",
         method: REQUEST_METHOD.POST,
         response: null,
         transformer: null,
     }),
-    logoutuser: new API_ENDPOINT({
-        url: "/auth/logout/",
+    passwordChange: new API_ENDPOINT({
+        url: "/auth/password/change/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: null,
+    }),
+    passwordReset: new API_ENDPOINT({
+        url: "/auth/password/reset/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: null,
+    }),
+    passwordResetRequest: new API_ENDPOINT({
+        url: "/auth/password/reset-request/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: null,
+    }),
+    resetPasswordConfirm: new API_ENDPOINT({
+        url: "/auth/password/reset/confirm/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: null,
+    }),
+    passwordResetVerify: new API_ENDPOINT({
+    url: "/auth/password/reset/verify-email-otp/",
+    method: REQUEST_METHOD.POST,
+    response: null,
+    transformer: null,
+}),
+ registrationVerify: new API_ENDPOINT({
+        url: "/auth/registration/verify-email/",
         method: REQUEST_METHOD.POST,
         response: null,
         transformer: null,

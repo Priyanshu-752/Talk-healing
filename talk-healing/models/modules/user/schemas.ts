@@ -1,66 +1,73 @@
 import { Instance, types } from 'mobx-state-tree';
 import { BaseModelSchemaBase, PaginatedSchemaBase } from '../../api/endpoint.types';
 
-
 // user schema
 export const User = types.model({
   ...BaseModelSchemaBase,
-  email: types.string,
-  full_name: types.string,
+  email: types.maybeNull(types.string),
+  is_phone_verified: types.maybeNull(types.boolean),
   phone: types.maybeNull(types.string),
-  is_email_verified: types.boolean,
-  date_of_birth: types.maybeNull(types.string),
-  
-
+  avatar: types.maybeNull(types.string),
+  last_login: types.maybeNull(types.string),
+  full_name: types.maybeNull(types.string),
+  is_email_verified: types.maybeNull(types.boolean),
 });
-
 export interface UserType extends Instance<typeof User> { }
 
-// logged in user schema
+export const UserPaginated = types.model({
+  ...PaginatedSchemaBase,
+  results: types.maybeNull(types.array(User)),
+});
+export interface UserPaginatedType extends Instance<typeof UserPaginated> { }
+
 export const LoggedInUser = types.model({
-  user: User,
+  user: types.maybeNull(User),
   access: types.maybeNull(types.string),
   refresh: types.maybeNull(types.string),
 });
 
 export interface LoggedInUserType extends Instance<typeof LoggedInUser> { }
+export const Registration = types.model({
+  ...BaseModelSchemaBase,
+  email: types.maybeNull(types.string),
+  password1: types.maybeNull(types.string),
+  password2: types.maybeNull(types.string),
+  full_name: types.maybeNull(types.string),
+  is_created_by_admin: types.maybeNull(types.boolean),
+  groups: types.maybeNull(types.array(types.string)),
+  phone: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+});
+export interface RegistrationType extends Instance<typeof Registration> { }
 
-export const UserPaginated = types.model({
+export const RegistrationPaginated = types.model({
   ...PaginatedSchemaBase,
-  results: types.array(User),
+  results: types.maybeNull(types.array(Registration)),
 });
-export interface UserPaginatedType extends Instance<typeof UserPaginated> { }
+export interface RegistrationPaginatedType extends Instance<typeof RegistrationPaginated> { }
 
-export const LoggedInUserPaginated = types.model({
-  ...PaginatedSchemaBase,
-  results: types.array(LoggedInUser),
-});
-export interface LoggedInUserPaginatedType extends Instance<typeof LoggedInUserPaginated> { }
-export const TermsOfUse = types.model({
-  // ...BaseModelSchemaBase,
-  privacy_policy: types.identifier,
-  terms_of_use: types.string,
-  agree_conditions: types.array(types.string),
-
-});
-export const Action = types.model({
-  // ...BaseModelSchemaBase,
-  label: types.string,
-  target_external_url: types.string,
-  target_internal_url: types.string,
+export const Login = types.model({
+  ...BaseModelSchemaBase,
+  email: types.maybeNull(types.string),
+  password: types.maybeNull(types.string),
 });
 
-export const Address = types.model({
-  id: types.identifier,
-  created_on: types.maybeNull(types.string),
-  edited_on: types.maybeNull(types.string),
-  _data: types.maybeNull(types.frozen()),
-  address_line1: types.string,
- 
+export interface LoginType extends Instance<typeof Login> { }
+
+export const Password = types.model({
+  ...BaseModelSchemaBase,
+  old_password: types.maybeNull(types.string),
+  new_password1: types.maybeNull(types.string),
+  new_password2: types.maybeNull(types.string),
+  email: types.maybeNull(types.string),
+  uid: types.maybeNull(types.string),
+  token: types.maybeNull(types.string),
 });
-export interface AddressType extends Instance<typeof Address> { }
-export const AddressResults = types.model({
-  ...PaginatedSchemaBase,
-  results: types.array(Address),
+
+export interface PasswordType extends Instance<typeof Password> { }
+
+export const resetPasswordToken = types.model({
+  token: types.string,
+  uid: types.string,
 });
-export interface AddressPaginatedType extends Instance<typeof AddressResults> { }
+export interface resetPasswordTokenType extends Instance<typeof resetPasswordToken> { }

@@ -1,6 +1,6 @@
 import { onSnapshot } from 'mobx-state-tree';
 import * as storage from 'localforage';
-import { RootStoreModel, RootStore } from './root-store';
+import {  RootStore } from './root-store';
 import { Environment } from '../environment';
 //import * as storage from "../../utils/mobile-storage"
 
