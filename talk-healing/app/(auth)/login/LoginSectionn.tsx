@@ -17,6 +17,7 @@ const formSchema = z.object({
 });
 type FormValues = z.infer<typeof formSchema>;
 
+
 // ICON COMPONENTS
 const GoogleIcon = () => (
   <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
@@ -63,32 +64,60 @@ export default function LoginSection() {
   });
 
   // Submission Handler
-  const onSubmit = async (data: FormValues) => {
-    setIsLoading(true);
-    setErrorMessage('');
-    try {
-      const response = await userStore.loginUser(data.email, data.password);
-      if (response.ok) {
-        setLoginSuccess(true);
-        setTimeout(() => {
-          router.push('/home');
-        }, 1500); // 1.5s delay for success feedback, adjust as needed
+const onSubmit = async (data: FormValues) => {
+  setIsLoading(true);
+  setErrorMessage('');
+  
+  console.log('Starting login with data:', { email: data.email, password: '***' });
+  
+  try {
+    console.log('Calling userStore.loginUser...');
+    const response = await userStore.loginUser(data.email, data.password);
+    
+    console.log('Response received:', {
+      response,
+      type: typeof response,
+      hasOk: 'ok' in response,
+      okValue: response?.ok,
+      hasError: 'error' in response,
+      errorValue: response?.error
+    });
+    
+    if (response && response.ok) {
+      console.log('Login successful');
+      setLoginSuccess(true);
+      setTimeout(() => {
+        router.push('/home');
+      }, 1500);
+    } else {
+      console.log('Login failed, handling error...');
+      if (response?.error) {
+        const errorText = typeof response.error === 'string'
+          ? response.error
+          : Object.values(response.error)[0] || 'Login failed. Please check your credentials.';
+        setErrorMessage(errorText as string);
       } else {
-        if (response.error) {
-          const errorText = typeof response.error === 'string'
-            ? response.error
-            : Object.values(response.error)[0] || 'Login failed. Please check your credentials.';
-          setErrorMessage(errorText as string);
-        } else {
-          setErrorMessage('An unexpected error occurred. Please try again.');
-        }
+        setErrorMessage('Login failed. Please check your credentials.');
       }
-    } catch (error) {
-      setErrorMessage('Connection error. Please check your network and try again.');
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (error) {
+    console.error('Caught error:', {
+      error,
+      type: typeof error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    
+    if (error instanceof Error) {
+      setErrorMessage(error.message);
+    } else {
+      setErrorMessage('Connection error. Please check your network and try again.');
+    }
+  } finally {
+    setIsLoading(false);
+    console.log('Login process completed');
+  }
+};
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">

@@ -30,8 +30,8 @@ export interface LoggedInUserType extends Instance<typeof LoggedInUser> { }
 export const Registration = types.model({
   ...BaseModelSchemaBase,
   email: types.maybeNull(types.string),
-  password1: types.maybeNull(types.string),
-  password2: types.maybeNull(types.string),
+  password: types.maybeNull(types.string),
+  confirmpassword: types.maybeNull(types.string),
   full_name: types.maybeNull(types.string),
   is_created_by_admin: types.maybeNull(types.boolean),
   groups: types.maybeNull(types.array(types.string)),

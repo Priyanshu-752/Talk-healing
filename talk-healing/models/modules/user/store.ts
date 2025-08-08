@@ -17,10 +17,39 @@ export const UserStore = types
   .extend(withEnvironment)
   .actions((self) => ({
     // Example placeholder action, add real ones as needed
-    loginUser: flow(function* (email: string, password: string) {
-      // Implement your login logic here (API call, update self fields, etc.)
-      // Example:
-      // yield self.environment.api.login(email, password);
-      // self.is_logged_in = true; // Example only
+ loginUser: flow(function* (email: string, password: string) {
+      const response = yield self.environment.api.call(
+        API_ENDPOINTS.loginUser,
+        {
+          email,
+          password,
+        }
+      );
+      console.log('---40 userstore', JSON.stringify(response.data.user, null, 2));
+      switch (response.status) {
+        case 200:
+          self.loggedInUserData = null;
+          yield storage.clear();
+          self.is_logged_in = true;
+          self.loggedInUserData = UserSchemas.LoggedInUser.create(
+            response.data
+          );
+          yield storage.setItem(
+            self.environment.api.config.token_key,
+            response.data[self.environment.api.config.token_key]
+          );
+          return ACTION_RESPONSES.success;
+        case 400:
+          return {
+            ...ACTION_RESPONSES.failure, code: response.status, error: response.data,
+          };
+        case 401:
+          return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };
+        case 500:
+          return ACTION_RESPONSES.failure;
+        default:
+          console.error('UNHANDLED ERROR');
+          return ACTION_RESPONSES.success;
+      }
     }),
   }));
