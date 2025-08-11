@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image'; 
 import {Images} from '@/public';
+import { useRouter } from 'next/navigation';
+import * as z from 'zod';
+import { useStores } from '@/models';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const EyeOpenIcon = () => (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
