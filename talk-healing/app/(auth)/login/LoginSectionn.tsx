@@ -72,7 +72,8 @@ const onSubmit = async (data: FormValues) => {
   
   try {
     console.log('Calling userStore.loginUser...');
-    const response = await userStore.loginUser(data.email, data.password);
+    console.log(JSON.stringify(userStore.loginUser,null,4),'================')
+    const response = await userStore?.loginUser(data.email, data.password);
     
     console.log('Response received:', {
       response,

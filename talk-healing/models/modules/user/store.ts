@@ -18,7 +18,7 @@ export const UserStore = types
   .extend(withEnvironment)
   .actions((self) => ({
     // REGISTER / SIGN UP
-    registerUser: flow(function* (full_name: string, email: string, password: string) {
+    signupUser: flow(function* (full_name: string, email: string, password: string) {
       try {
         const payload = {
           full_name,
@@ -51,6 +51,7 @@ export const UserStore = types
     // LOGIN
     loginUser: flow(function* (email: string, password: string) {
       const response = yield self.environment.api.call(API_ENDPOINTS.loginUser, { email, password });
+      console.log("hittttttt", response)      
 
       switch (response.status) {
         case 200:
@@ -146,3 +147,4 @@ export const UserStore = types
       }
     }),
   }));
+

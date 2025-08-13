@@ -2,12 +2,22 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image'; 
-import {Images} from '@/public';
+import { Images } from '@/public';
 import { useRouter } from 'next/navigation';
 import * as z from 'zod';
 import { useStores } from '@/models';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+// Form Schema
+const formSchema = z.object({
+  full_name: z.string().min(2, { message: 'Full name must be at least 2 characters' }),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  confirmpassword: z.string().min(6, { message: 'Password must be at least 6 characters' })
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const EyeOpenIcon = () => (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -24,16 +34,86 @@ const EyeClosedIcon = () => (
 );
 
 export default function SignUpSection() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const router = useRouter();
+    const { userStore } = useStores();
+    
+    // State management
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [signupSuccess, setSignupSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Sign Up attempt:', { name, email, password, confirmPassword });
+    // React-Hook-Form setup
+    const form = useForm<FormValues>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            full_name: '',
+            email: '',
+            password: '',
+            confirmpassword: ''
+        }
+    });
+
+    // Submission Handler
+    const onSubmit = async (data: FormValues) => {
+        // Check if passwords match
+        if (data.password !== data.confirmpassword) {
+            setErrorMessage('Passwords do not match');
+            return;
+        }
+
+        setIsLoading(true);
+        setErrorMessage('');
+        
+        console.log('Starting signup with data:', { 
+            name: data.full_name, 
+            email: data.email, 
+            password: '***' 
+        });
+        
+        try {
+            console.log('Calling userStore.signupUser...');
+            const response = await userStore.signupUser(
+                data.email,
+                data.full_name,
+                data.password,
+                
+            );
+            
+            console.log('Response received:', response);
+            
+            if (response && response.ok) {
+                console.log('Signup successful');
+                setSignupSuccess(true);
+                
+                // Redirect to login page after successful signup
+                setTimeout(() => {
+                    router.push('/login');
+                }, 2000);
+            } else {
+                console.log('Signup failed, handling error...');
+                if (response?.error) {
+                    const errorText = typeof response.error === 'string'
+                        ? response.error
+                        : Object.values(response.error)[0] || 'Signup failed. Please check your information.';
+                    setErrorMessage(errorText as string);
+                } else {
+                    setErrorMessage('Signup failed. Please check your information.');
+                }
+            }
+        } catch (error) {
+            console.error('Caught error:', error);
+            
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage('Connection error. Please check your network and try again.');
+            }
+        } finally {
+            setIsLoading(false);
+            console.log('Signup process completed');
+        }
     };
 
     return (
@@ -53,85 +133,109 @@ export default function SignUpSection() {
             </div>
             {/*right form section*/}
             <div className="flex-1 flex justify-center items-center p-6 sm:p-10 lg:p-12">
-                <form onSubmit={handleSubmit} className='w-full max-w-sm flex flex-col gap-4'>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full max-w-sm flex flex-col gap-4'>
                     <h2 className='text-3xl font-semibold text-center text-slate-900 mt-3'>Sign Up</h2>
+
+                    {/* Error and Success messages */}
+                    {errorMessage && (
+                        <div className="text-red-600 text-sm text-center">{errorMessage}</div>
+                    )}
+                    {signupSuccess && (
+                        <div className="text-green-600 text-sm text-center">
+                            Signup successful! Redirecting to login...
+                        </div>
+                    )}
 
                     {/*name input */}
                     <div>
-                        <label htmlFor='name' className='block text-sm
+                        <label htmlFor='full_name' className='block text-sm
                         font-medium text-slate-900 mb-2'>Name</label>
                         <input
+                        {...form.register('full_name')}
                         type='text'
-                        id='name'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
+                        id='full_name'
+                        disabled={isLoading}
                         className='w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
                         placeholder='Enter your name'
                         />
+                        {form.formState.errors.full_name && (
+                            <p className="text-xs text-red-500 mt-1">{form.formState.errors.full_name.message}</p>
+                        )}
                     </div>
                     {/* Email Input */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="email" className="font-medium text-slate-700 text-sm">Email</label>
                 <input
+                  {...form.register('email')}
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                   placeholder="you@example.com"
                   className="px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 transition-all outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 placeholder:text-slate-400"
-                  required
                 />
+                {form.formState.errors.email && (
+                    <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+                )}
               </div>
                {/* Password Input */}
               <div className="flex flex-col gap-2">
                 <label htmlFor="password" className="font-medium text-slate-700 text-sm">Password</label>
                 <div className="relative flex items-center">
                   <input
+                    {...form.register('password')}
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={isLoading}
                     placeholder="Enter your password"
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 transition-all outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 placeholder:text-slate-400"
-                    required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
                     className="absolute right-3 text-slate-500 hover:text-slate-800 transition-colors"
                   >
                     {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                   </button>
                 </div>
+                {form.formState.errors.password && (
+                    <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
+                )}
               </div>
 
                 {/* Confirm Password Input */}
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="confirmPassword" className="font-medium text-slate-700 text-sm">Confirm Password</label>
+                    <label htmlFor="confirmpassword" className="font-medium text-slate-700 text-sm">Confirm Password</label>
                     <div className="relative flex items-center">
                         <input
-                            id="confirmPassword"
+                            {...form.register('confirmpassword')}
+                            id="confirmpassword"
                             type={showConfirmPassword ? 'text' : 'password'}
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            disabled={isLoading}
                             placeholder="Confirm your password"
                             className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 transition-all outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 placeholder:text-slate-400"
-                            required
                         />
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            disabled={isLoading}
                             className="absolute right-3 text-slate-500 hover:text-slate-800 transition-colors"
                         >
                             {showConfirmPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                         </button>
                     </div>
+                    {form.formState.errors.confirmpassword && (
+                        <p className="text-xs text-red-500">{form.formState.errors.confirmpassword.message}</p>
+                    )}
                 </div>
 
               {/* Submit Button */}
-              <button type="submit" className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg transition-all hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Sign Up
+              <button 
+                type="submit" 
+                disabled={isLoading}
+                className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg transition-all hover:bg-blue-700 hover:-translate-y-px active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? "Signing up..." : "Sign Up"}
               </button>
 
               {/* Sign Up Prompt */}

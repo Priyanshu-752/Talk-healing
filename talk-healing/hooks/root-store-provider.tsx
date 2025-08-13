@@ -28,6 +28,7 @@ export function RootStoreProviderWrapper({ children }: { children: React.ReactNo
   if (!rootStore) {
     return <Loader />;
   }
+console.log(JSON.stringify(rootStore,null,4),'0000000000000000000000000')
 
   return <RootStoreProvider value={rootStore}>{children}</RootStoreProvider>;
 } 
