@@ -1,6 +1,6 @@
 // models/modules/user/store.ts
 import { types, flow } from 'mobx-state-tree';
-import * as storage from 'localforage';
+import { storage } from '../../utils/storage';
 import { withEnvironment } from '../../extensions/with-environment';
 import { ACTION_RESPONSES } from '../../api/endpoint.types';
 import * as UserSchemas from './schemas';
@@ -56,7 +56,13 @@ export const UserStore = types
       switch (response.status) {
         case 200:
           self.loggedInUserData = null;
-          yield storage.clear();
+          
+          // Clear storage
+          try {
+            yield storage.clear();
+          } catch (error) {
+            console.warn('Failed to clear storage:', error);
+          }
 
           self.is_logged_in = true;
           self.loggedInUserData = UserSchemas.LoggedInUser.create(response.data);
@@ -64,7 +70,11 @@ export const UserStore = types
           // Persist token if present
           const tokenKey = self.environment.api.config.token_key;
           if (tokenKey && response.data && response.data[tokenKey]) {
-            yield storage.setItem(tokenKey, response.data[tokenKey]);
+            try {
+              yield storage.setItem(tokenKey, response.data[tokenKey]);
+            } catch (error) {
+              console.warn('Failed to save token:', error);
+            }
           }
 
           return ACTION_RESPONSES.success; // { ok: true }
@@ -85,7 +95,14 @@ export const UserStore = types
         if (response.status === 200 || response.status === 204) {
           self.loggedInUserData = null;
           self.is_logged_in = false;
-          yield storage.clear();
+          
+          // Clear storage
+          try {
+            yield storage.clear();
+          } catch (error) {
+            console.warn('Failed to clear storage during logout:', error);
+          }
+          
           return ACTION_RESPONSES.success;
         }
         return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };

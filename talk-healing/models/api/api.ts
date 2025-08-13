@@ -1,7 +1,6 @@
 import { ApisauceInstance, create, ApiResponse, HEADERS } from "apisauce";
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config";
-//import * as storage from "../../utils/mobile-storage"
-import * as storage from "localforage";
+import { storage } from "../utils/storage";
 import {
   API_ENDPOINT,
   REQUEST_METHOD,
@@ -44,7 +43,7 @@ export class Api {
    *
    * Be as quick as possible in here.
    */
-  setup() {
+  async setup() {
     // construct the apisauce instance
     this.apisauce = create({
       baseURL: this.config.url,
@@ -53,6 +52,13 @@ export class Api {
         Accept: "application/json",
       },
     });
+    
+    // Initialize storage
+    try {
+      await storage.ready();
+    } catch (error) {
+      console.warn('Storage not ready during API setup:', error);
+    }
   }
   async call(
     endpoint: API_ENDPOINT,
@@ -61,7 +67,15 @@ export class Api {
     headers: HEADERS = {}
   ): Promise<any> {
     // console.log(endpoint)
-    const token = await storage.getItem(this.config.token_key);
+    let token = null;
+    
+    // Try to get token from storage
+    try {
+      token = await storage.getItem(this.config.token_key);
+    } catch (error) {
+      console.warn('Failed to retrieve token from storage:', error);
+    }
+    
     if (token) {
       //console.log("token", token)
       this.apisauce.setHeader("Authorization", "Bearer " + token);

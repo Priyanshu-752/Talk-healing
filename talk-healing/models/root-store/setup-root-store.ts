@@ -1,8 +1,7 @@
 import { onSnapshot } from "mobx-state-tree";
 import { RootStoreModel, RootStore } from "./root-store";
 import { Environment } from "../environment";
-import * as storage from "localforage";
-//import * as storage from "../../utils/mobile-storage"
+import { storage } from "../utils/storage";
 
 /**
  * The key we'll be saving our state as within async storage.
@@ -29,26 +28,32 @@ export async function setupRootStore() {
   let rootStore: RootStore;
   let data: any;
 
+  // Initialize storage first
+  await storage.ready();
+
   // prepare the environment that will be associated with the RootStore.
   const env = await createEnvironment();
+  
   try {
     // load data from storage
     data = (await storage.getItem(ROOT_STATE_STORAGE_KEY)) || {};
     rootStore = RootStoreModel.create(data, env);
-  } catch (e:any) {
+  } catch (e: any) {
     // if there's any problems loading, then let's at least fallback to an empty state
     // instead of crashing.
     rootStore = RootStoreModel.create({}, env);
 
     // but please inform us what happened
-    console.error(e.message, null);
+    console.error('Root store setup error:', e.message);
   }
 
   // track changes & save to storage
-  onSnapshot(rootStore, (snapshot) =>
-    storage.setItem(ROOT_STATE_STORAGE_KEY, snapshot)
-  );
+  onSnapshot(rootStore, (snapshot) => {
+    storage.setItem(ROOT_STATE_STORAGE_KEY, snapshot).catch((error) => {
+      console.warn('Failed to save state to storage:', error);
+    });
+  });
 
   return rootStore;
 }
-export const localStorage = storage;
+export { storage as localStorage };
