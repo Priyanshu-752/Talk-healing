@@ -1,8 +1,8 @@
-import React from 'react';
 import { FiMoreHorizontal } from 'react-icons/fi';
 import { Images } from '@/public';
 import Link from 'next/link';
 import ActionBar from './actionbar/actionbar';
+import React,{ useState ,useEffect , useCallback,useMemo } from 'react';
 
 export default function PostCard({ posts = [] }) {
 

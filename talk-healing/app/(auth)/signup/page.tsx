@@ -13,8 +13,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const formSchema = z.object({
   full_name: z.string().min(2, { message: 'Full name must be at least 2 characters' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
-  confirmpassword: z.string().min(6, { message: 'Password must be at least 6 characters' })
+  password1: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  password2: z.string().min(6, { message: 'Password must be at least 6 characters' })
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -50,15 +50,15 @@ export default function SignUpSection() {
         defaultValues: {
             full_name: '',
             email: '',
-            password: '',
-            confirmpassword: ''
+            password1: '',
+            password2: ''
         }
     });
 
     // Submission Handler
     const onSubmit = async (data: FormValues) => {
         // Check if passwords match
-        if (data.password !== data.confirmpassword) {
+        if (data.password1 !== data.password2) {
             setErrorMessage('Passwords do not match');
             return;
         }
@@ -67,7 +67,7 @@ export default function SignUpSection() {
         setErrorMessage('');
         
         console.log('Starting signup with data:', { 
-            name: data.full_name, 
+            full_name: data.full_name, 
             email: data.email, 
             password: '***' 
         });
@@ -75,10 +75,10 @@ export default function SignUpSection() {
         try {
             console.log('Calling userStore.signupUser...');
             const response = await userStore.signupUser(
-                data.email,
                 data.full_name,
-                data.password,
-                
+                data.email,
+                data.password1,
+                data.password2,
             );
             
             console.log('Response received:', response);
@@ -182,7 +182,7 @@ export default function SignUpSection() {
                 <label htmlFor="password" className="font-medium text-slate-700 text-sm">Password</label>
                 <div className="relative flex items-center">
                   <input
-                    {...form.register('password')}
+                    {...form.register('password1')}
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     disabled={isLoading}
@@ -198,8 +198,8 @@ export default function SignUpSection() {
                     {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                   </button>
                 </div>
-                {form.formState.errors.password && (
-                    <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
+                {form.formState.errors.password1 && (
+                    <p className="text-xs text-red-500">{form.formState.errors.password1.message}</p>
                 )}
               </div>
 
@@ -208,7 +208,7 @@ export default function SignUpSection() {
                     <label htmlFor="confirmpassword" className="font-medium text-slate-700 text-sm">Confirm Password</label>
                     <div className="relative flex items-center">
                         <input
-                            {...form.register('confirmpassword')}
+                            {...form.register('password2')}
                             id="confirmpassword"
                             type={showConfirmPassword ? 'text' : 'password'}
                             disabled={isLoading}
@@ -224,8 +224,8 @@ export default function SignUpSection() {
                             {showConfirmPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                         </button>
                     </div>
-                    {form.formState.errors.confirmpassword && (
-                        <p className="text-xs text-red-500">{form.formState.errors.confirmpassword.message}</p>
+                    {form.formState.errors.password2 && (
+                        <p className="text-xs text-red-500">{form.formState.errors.password2.message}</p>
                     )}
                 </div>
 

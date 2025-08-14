@@ -18,13 +18,13 @@ export const UserStore = types
   .extend(withEnvironment)
   .actions((self) => ({
     // REGISTER / SIGN UP
-    signupUser: flow(function* (full_name: string, email: string, password: string) {
+    signupUser: flow(function* (full_name: string, email: string, password1: string,password2: string) {
       try {
         const payload = {
           full_name,
           email,
-          password,
-          confirmpassword: password, // align with your Registration model
+          password1,
+          password2: password1, // align with your Registration model
         };
 
         const response = yield self.environment.api.call(API_ENDPOINTS.registration, payload);
