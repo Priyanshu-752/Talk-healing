@@ -8,36 +8,39 @@ export default function CommunityCards({
   image = Images.communityCardImage,
   members = "1000+",
   showButtons = true,
-  
 }) {
+  // If members is an array, format as 'X Members'; otherwise, show as string
+  const memberDisplay = Array.isArray(members) ? `${members.length} Members` : `${members} Members`;
+
   return (
-    
     <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl font-sans hover:shadow-lg transition">
       <div className="p-4">
         <Link href="/communityhome" className="block">
-        
-        {/* Image */}
-        <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
-          <img src={Images.communityCardImage} alt={`${title} card`} className="w-full object-cover h-40" />
-        </div>
+          {/* Image */}
+          <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+            <img
+              src={image} // <-- use `image` prop, not hardcoded image
+              alt={`${title} card`}
+              className="w-full object-cover h-40"
+            />
+          </div>
 
-        {/* Title */}
-        <div className="text-center text-xl font-bold text-black dark:text-white pt-4">
-          {title}
-        </div>
+          {/* Title */}
+          <div className="text-center text-xl font-bold text-black dark:text-white pt-4">
+            {title}
+          </div>
 
-        {/* Buttons and members */}
-        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4">
-          {showButtons && (
-            <>
-    
-            {/*  <Button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:scale-105 hover:bg-blue-700">
-                Join
-              </Button>*/}
-            </> 
-          )}
-          <span className="text-sm text-gray-600 dark:text-gray-300">{members} Members</span>
-        </div>
+          {/* Buttons and members */}
+          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4">
+            {showButtons && (
+              <>
+                {/* Optionally add future buttons (e.g., Join) */}
+              </>
+            )}
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              {memberDisplay}
+            </span>
+          </div>
         </Link>
       </div>
     </div>

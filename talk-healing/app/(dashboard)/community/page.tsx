@@ -5,25 +5,23 @@ import Header from '@/app/componenets/Header/Header';
 import CommunityCards from '@/app/componenets/communitycards/communitycards';
 import CreateCommunityModal from '@/app/componenets/Modals/CreateCommunity/CreateCommunityModal';
 import { observer } from 'mobx-react-lite';
-import { useStores } from '@/models'; // Assuming the MobX store is set up the same as your old code
+import { useStores } from '@/models';
+import { Images } from '@/public';
 
 const CommunityPage = observer(() => {
-  const { communityStore } = useStores(); // MobX community store from old project
+  const { communityStore } = useStores();
   const [showModal, setShowModal] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  // Fetch communities on mount (or whenever fetching is needed)
   useEffect(() => {
     communityStore.getCommunity();
   }, [communityStore]);
 
-  // Filtered community data logic (copied from old code)
   const filteredData = communityStore.communityData?.results.filter((card) => {
     const filterCardString = [card.community_name].join(' ').toLowerCase();
     return filterCardString.includes(searchText.toLowerCase());
   }) || [];
 
-  // Handler for community creation to re-fetch list
   const handleCommunityCreated = () => {
     communityStore.getCommunity();
     setShowModal(false);
@@ -58,7 +56,13 @@ const CommunityPage = observer(() => {
                 <div className="col-span-full text-center py-10 text-gray-400">No communities found.</div>
               ) : (
                 filteredData.map((community) => (
-                  <CommunityCards key={community.id} community={community} />
+                  <CommunityCards
+                    key={community.id}
+                    title={community.community_name}
+                    image={community.community_img || Images.communityCardImage}
+                    members={community.member} // can be string or array
+                    // showButtons={true} // uncomment if you want to force 'Join' etc.
+                  />
                 ))
               )}
             </div>
