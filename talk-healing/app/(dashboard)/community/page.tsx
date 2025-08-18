@@ -72,12 +72,12 @@ const CommunityPage = observer(() => {
 
       {/* Modal - pass callback for after create */}
       {showModal && (
-        <CreateCommunityModal
-          onClose={() => setShowModal(false)}
-          opened={showModal}
-          onCommunityCreated={handleCommunityCreated}
-        />
-      )}
+  <CreateCommunityModal
+    opened={showModal}
+    onClose={() => setShowModal(false)}
+    onCommunityCreated={handleCommunityCreated}
+  />
+)}
     </div>
   );
 });

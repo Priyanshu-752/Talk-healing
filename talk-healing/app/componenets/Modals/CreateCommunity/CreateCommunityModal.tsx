@@ -1,71 +1,121 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
+import { useStores } from "@/models";
 
-export default function CreateCommunityModal({ onClose }: { onClose: () => void }) {
-  const [shareText, setshareText] = useState('');
-  const isPostButtonDisabled = shareText.trim().length === 0;
-  const [selectedCategory, setSelectedCategory] = useState('Public');
-  const categories = ['Public', 'Private'];
+export default function CreateCommunityModal({ onClose, opened, onCommunityCreated }) {
+  const { communityStore } = useStores();
+  const [communityName, setCommunityName] = useState('');
+  const [communityType, setCommunityType] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [notif, setNotif] = useState(null);
+
+  const isSubmitDisabled = !communityName.trim() || !communityType || loading;
+
+  // Reset fields
+  const resetStatesModal = () => {
+    setCommunityType('');
+    setCommunityName('');
+    setNotif(null);
+  };
+
+  const handleCreate = async () => {
+  setLoading(true);
+  setNotif(null);
+  try {
+    const formData = new FormData();
+    formData.append('community_name', communityName);
+    formData.append('community_type', communityType);
+    const result = await communityStore.postCommunity(formData);
+    if (result === "success") {
+      setNotif({ type: "success", text: "Community created successfully!" });
+      if (onCommunityCreated) onCommunityCreated();
+      onClose();
+      resetStatesModal();
+    } else {
+      setNotif({ type: "error", text: "Failed to create community. Please try again." });
+    }
+  } catch (err) {
+    let errorMsg = "Failed to create community. Please try again.";
+    if (err?.response?.data) {
+      errorMsg += ` (${JSON.stringify(err.response.data)})`;
+    }
+    setNotif({ type: "error", text: errorMsg });
+    console.error("API error when creating:", err?.response?.data || err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          className="px-4 py-2 bg-green-500 text-white rounded-full font-medium transition hover:scale-105 hover:bg-green-600"
-        >
-          Create Community
-        </Button>
-      </DialogTrigger>
+    <Dialog open={opened} onOpenChange={val => !val && onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a Community</DialogTitle>
           <DialogDescription>
-            Give your community a name and select its visibility.
+            Fill in all fields below to create a new community.
           </DialogDescription>
         </DialogHeader>
 
-        {/* Move form content OUTSIDE DialogDescription */}
-        <div className="flex flex-col gap-2 mt-4">
-          <textarea
-            className="bg-transparent w-full focus:outline-none resize-none text-xl placeholder-gray-500"
-            placeholder="Name the community..."
-            rows={2}
-            value={shareText}
-            onChange={(e) => setshareText(e.target.value)}
-          />
-
-          <div className="relative">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-gray-50 border border-gray-300 rounded-lg py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <Button
-            className={`px-5 py-2 rounded-full font-bold transition-colors duration-200 ${
-              isPostButtonDisabled
-                ? 'bg-blue-300 text-white cursor-not-allowed'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
+        {notif && (
+          <div
+            className={`mb-2 p-2 rounded text-sm ${
+              notif.type === "success"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
             }`}
-            disabled={isPostButtonDisabled}
-            onClick={onClose}  
           >
-            Create
+            {notif.text}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-3">
+          <div>
+            <div className="mb-1 font-semibold">Community Type</div>
+            <div className="flex gap-3">
+              {['Public', 'Private'].map(type => (
+                <label key={type} className="flex items-center gap-1">
+                  <input
+                    type="radio"
+                    name="communityType"
+                    value={type}
+                    checked={communityType === type}
+                    onChange={() => setCommunityType(type)}
+                    disabled={loading}
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <input
+              className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
+              type="text"
+              placeholder="Community name..."
+              value={communityName}
+              onChange={e => setCommunityName(e.target.value)}
+              required
+              disabled={loading}
+              maxLength={200}
+            />
+          </div>
+        </div>
+        <div className="mt-4 flex justify-end">
+          <Button
+            className="px-5 py-2 rounded-full font-bold transition-colors duration-200 bg-gradient-to-r from-lime-400 to-teal-500 text-white"
+            disabled={isSubmitDisabled}
+            onClick={handleCreate}
+          >
+            {loading ? "Creating..." : "Create community"}
           </Button>
         </div>
       </DialogContent>
