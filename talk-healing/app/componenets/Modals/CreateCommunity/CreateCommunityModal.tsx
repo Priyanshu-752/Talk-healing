@@ -26,34 +26,53 @@ export default function CreateCommunityModal({ onClose, opened, onCommunityCreat
   };
 
   const handleCreate = async () => {
-  setLoading(true);
-  setNotif(null);
-  try {
-    const formData = new FormData();
-    formData.append('community_name', communityName);
-    formData.append('community_type', communityType);
-    const result = await communityStore.postCommunity(formData);
-    if (result === "success") {
-      setNotif({ type: "success", text: "Community created successfully!" });
-      if (onCommunityCreated) onCommunityCreated();
-      onClose();
-      resetStatesModal();
-    } else {
-      setNotif({ type: "error", text: "Failed to create community. Please try again." });
-    }
-  } catch (err) {
-    let errorMsg = "Failed to create community. Please try again.";
-    if (err?.response?.data) {
-      errorMsg += ` (${JSON.stringify(err.response.data)})`;
-    }
-    setNotif({ type: "error", text: errorMsg });
-    console.error("API error when creating:", err?.response?.data || err);
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setNotif(null);
+    
+    try {
+      const formData = new FormData();
+      formData.append('community_name', communityName.trim());
+      // Fix: Use 'commmunity_type' (with 3 m's) to match your schema
+      formData.append('commmunity_type', communityType);
+      
+      console.log('Sending FormData:', {
+        community_name: communityName.trim(),
+        commmunity_type: communityType
+      });
 
-
+      const result = await communityStore.postCommunity(formData);
+      
+      console.log('API Result:', result);
+      
+      if (result === "success") {
+        setNotif({ type: "success", text: "Community created successfully!" });
+        if (onCommunityCreated) onCommunityCreated();
+        onClose();
+        resetStatesModal();
+      } else {
+        setNotif({ type: "error", text: "Failed to create community. Please try again." });
+      }
+    } catch (err) {
+      console.error("Full error object:", err);
+      
+      let errorMsg = "Failed to create community. Please try again.";
+      
+      // Better error handling
+      if (err?.response?.data) {
+        if (typeof err.response.data === 'object') {
+          errorMsg += ` Details: ${JSON.stringify(err.response.data)}`;
+        } else {
+          errorMsg += ` Details: ${err.response.data}`;
+        }
+      } else if (err?.message) {
+        errorMsg += ` Error: ${err.message}`;
+      }
+      
+      setNotif({ type: "error", text: errorMsg });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={opened} onOpenChange={val => !val && onClose()}>
@@ -96,7 +115,9 @@ export default function CreateCommunityModal({ onClose, opened, onCommunityCreat
               ))}
             </div>
           </div>
+
           <div>
+            <label className="block mb-1 font-semibold">Community Name</label>
             <input
               className="w-full rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
               type="text"
@@ -109,6 +130,7 @@ export default function CreateCommunityModal({ onClose, opened, onCommunityCreat
             />
           </div>
         </div>
+
         <div className="mt-4 flex justify-end">
           <Button
             className="px-5 py-2 rounded-full font-bold transition-colors duration-200 bg-gradient-to-r from-lime-400 to-teal-500 text-white"
