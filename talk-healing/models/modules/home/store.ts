@@ -1,108 +1,55 @@
-// store.ts
-"use client";
+/* eslint-disable no-param-reassign */
+/* eslint-disable max-len */
+import { flow, types } from 'mobx-state-tree';
+import { ACTION_RESPONSES } from '../../api/endpoint.types';
+import { withEnvironment } from '../../extensions/with-environment';
+import { API_ENDPOINTS } from './endpoints';
+import * as HomeSchema from './schemas';
 
-import { makeAutoObservable, runInAction } from "mobx";
-import { fetchTopics, fetchPosts, fetchCommunities, createPost } from "./endpoints";
-import { PostInputType } from "./schema";
+export const HomeStore = types.model({
+    communityData: types.maybeNull(HomeSchema.CommunityPaginated),
+    postInIdHomeData: types.maybeNull(HomeSchema.PostInIdHomeDataSchema),
+})
+    .extend(withEnvironment)
+    .actions((self) => ({
+        getCommunity: flow(function* () {
+            const response = yield self.environment.api.call(API_ENDPOINTS.getHomeCommunities, {
+            });
 
-export class ForumStore {
-  topics: TopicType[] = [];
-  posts: PostType[] = [];
-  communities: CommunityType[] = [];
-  loading: boolean = false;
-  error: string = "";
+            switch (response.status) {
+                case 200:
+                    self.communityData = HomeSchema.CommunityPaginated.create(response.data);
+                    return ACTION_RESPONSES.success;
+                case 400:
+                    return ACTION_RESPONSES.failure;
+                default:
+                    console.error('UNHANDLED ERROR');
+                    break;
+            }
 
-  constructor() {
-    makeAutoObservable(this);
-  }
+            return ACTION_RESPONSES.failure;
+        }),
 
-  async loadTopics() {
-    this.loading = true;
-    try {
-      const data = await fetchTopics();
-      runInAction(() => {
-        this.topics = data;
-        this.loading = false;
-      });
-    } catch (e: any) {
-      runInAction(() => {
-        this.error = e.message || "Failed to load topics";
-        this.loading = false;
-      });
-    }
-  }
+        getPostInIdHomeData: flow(function* () {
+            const response = yield self.environment.api.call(API_ENDPOINTS.getHomeCommunities);
+            console.log('responseHomeData', response);
+            switch (response.status) {
+                case 200:
+                    console.log('Response Data:', response.data);
+                    self.postInIdHomeData = HomeSchema.PostInIdHomeDataSchema.create({
+                        ...response.data,
+                        results: response.data.results.map((result: any) => ({
+                            ...result,
+                            // community: result.community ? result.community.id : null, // or any other field from the community object you want to keep
+                        })),
+                    });
+                    return ACTION_RESPONSES.success;
+                case 400:
+                    return ACTION_RESPONSES.failure;
+                default:
+                    console.error('UNHANDLED ERROR');
+                    return ACTION_RESPONSES.failure;
+            }
+        }),
 
-  async loadPosts() {
-    this.loading = true;
-    try {
-      const data = await fetchPosts();
-      runInAction(() => {
-        this.posts = data;
-        this.loading = false;
-      });
-    } catch (e: any) {
-      runInAction(() => {
-        this.error = e.message || "Failed to load posts";
-        this.loading = false;
-      });
-    }
-  }
-
-  async loadCommunities() {
-    this.loading = true;
-    try {
-      const data = await fetchCommunities();
-      runInAction(() => {
-        this.communities = data;
-        this.loading = false;
-      });
-    } catch (e: any) {
-      runInAction(() => {
-        this.error = e.message || "Failed to load communities";
-        this.loading = false;
-      });
-    }
-  }
-
-  async addPost(input: PostInputType) {
-    this.loading = true;
-    try {
-      const newPost = await createPost(input);
-      runInAction(() => {
-        this.posts.unshift(newPost);
-        this.loading = false;
-      });
-      return newPost;
-    } catch (e: any) {
-      runInAction(() => {
-        this.error = e.message || "Failed to create post";
-        this.loading = false;
-      });
-      throw e;
-    }
-  }
-}
-
-// Types for convenience
-export type TopicType = {
-  id: string;
-  title: string;
-  description?: string;
-};
-
-export type PostType = {
-  id: string;
-  author: string;
-  content: string;
-  created_at: string;
-  topicId: string;
-};
-
-export type CommunityType = {
-  id: string;
-  name: string;
-  description?: string;
-  membersCount?: number;
-};
-
-export const forumStore = new ForumStore();
+    }));
