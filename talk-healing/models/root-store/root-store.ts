@@ -1,10 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { UserStore } from "@/models/modules/user/store"
 import { CommunityStore } from '../modules/communities/store';
-// import { NotificationStore } from "@/models/modules/notification/store"
-// import { GlobalsStore } from "@/models/modules/globals/store"
-// import { DashboardStore } from "../modules/dashboard/store"
-
+import { HomeStore } from '../modules/home/store';
 /**
  * A RootStore model.
  */
@@ -12,6 +9,7 @@ import { CommunityStore } from '../modules/communities/store';
 export const RootStoreModel = types.model("RootStore").props({
     userStore: types.optional(UserStore, {} as any),
     communityStore: types.optional(CommunityStore, {} as any),
+    homeStore: types.optional(HomeStore, {} as any),
     // dashboardStore: types.optional(DashboardStore, {} as any), 
     // globalsStore: types.optional(GlobalsStore, {} as any),
     // notificationStore: types.optional(NotificationStore, {} as any),

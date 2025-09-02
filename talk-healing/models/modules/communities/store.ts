@@ -23,12 +23,13 @@ export const CommunityStore = types.model({
         getCommunity: flow(function* () {
             const response = yield self.environment.api.call(API_ENDPOINTS.getCommunities, {
             });
-
+            console.log(response);
             switch (response.status) {
                 case 200:
                     self.communityData = CommunitySchema.CommunityPaginated.create(response.data);
                     return ACTION_RESPONSES.success;
                 case 400:
+                    console.log("error")
                     return ACTION_RESPONSES.failure;
                 default:
                     console.error('UNHANDLED ERROR');
@@ -37,53 +38,31 @@ export const CommunityStore = types.model({
 
             return ACTION_RESPONSES.failure;
         }),
+postCommunity: flow(function* (data: FormData) {
+    const response = yield self.environment.api.call(
+        API_ENDPOINTS.postCommunity, 
+        data, 
+        {}, 
+        {
+            "Content-Type": "multipart/form-data",
+        }
+    );
 
-        postCommunity: flow(function* (data: FormData) {
-            try {
-                console.log('Calling API with data:', data);
-                
-                // Log FormData contents
-                for (let pair of data.entries()) {
-                    console.log(pair[0] + ': ' + pair[1]);
-                }
-                
-                const response = yield self.environment.api.call(
-                    API_ENDPOINTS.postCommunity, 
-                    data, 
-                    {}, 
-                    {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                );
-                
-                console.log('API Response:', response);
-                
-                switch (response.status) {
-                    case 201:
-                        console.log('Success - Creating schema with:', response.data);
-                        self.postedCommunity = CommunitySchema.CommunityPostMediaSchema.create(response.data);
-                        return ACTION_RESPONSES.success;
-                    case 400:
-                        console.error('Bad Request (400):', response.data);
-                        return ACTION_RESPONSES.failure;
-                    case 401:
-                        console.error('Unauthorized (401):', response.data);
-                        return ACTION_RESPONSES.failure;
-                    case 403:
-                        console.error('Forbidden (403):', response.data);
-                        return ACTION_RESPONSES.failure;
-                    case 500:
-                        console.error('Server Error (500):', response.data);
-                        return ACTION_RESPONSES.failure;
-                    default:
-                        console.error('UNHANDLED ERROR - Status:', response.status, 'Data:', response.data);
-                        return ACTION_RESPONSES.failure;
-                }
-            } catch (error) {
-                console.error('Exception in postCommunity:', error);
-                return ACTION_RESPONSES.failure;
-            }
-        }),
+    switch (response.status) {
+        case 201:
+            self.postedCommunity = CommunitySchema.CommunityPostMediaSchema.create(response.data);
+            return ACTION_RESPONSES.success;
+        case 400:
+            return ACTION_RESPONSES.failure;
+        default:
+            console.error("UNHANDLED ERROR", response);
+            break;
+    }
+
+    return ACTION_RESPONSES.failure;
+}),
+
+
 
         getPostInIdCommunityData: flow(function* () {
             const response = yield self.environment.api.call(API_ENDPOINTS.getCommunityContent);
