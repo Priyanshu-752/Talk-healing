@@ -1,41 +1,31 @@
 import { Instance, types } from "mobx-state-tree"
 import { PaginatedSchemaBase, BaseModelSchemaBase } from "../../api/endpoint.types"
-// schemas.ts
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  read: boolean;
-  actionUrl?: string;
-  createdAt: string;
-  userId: string;
-}
 
-export interface NotificationResponse {
-  notifications: Notification[];
-  unreadCount: number;
-  totalCount: number;
-  hasMore: boolean;
-}
+export const Action = types.model({
+    label: types.string,
+    target_external_url: types.string,
+    target_internal_url: types.string,
+})
 
-export interface NotificationFilters {
-  page?: number;
-  limit?: number;
-  type?: string;
-  read?: boolean;
-}
 
-// API Request/Response types
-export type GetNotificationsRequest = {
-  params?: NotificationFilters;
-  signal?: AbortSignal;
-};
+export const Notification = types.model({
+    ...BaseModelSchemaBase,
+    title: types.string,
+    image: types.maybeNull(types.string),
+    message: types.maybeNull(types.string),
+    actions: types.maybeNull(types.array(Action)),
+    is_read: types.boolean,
+    notification_type: types.string,
+    content_type: types.integer,
+    target_user: types.string,
+    object_id: types.string,
+})
 
-export type MarkAsReadRequest = {
-  notificationId: string;
-};
+export interface NotificationsType extends Instance<typeof Notification> { }
 
-export type DeleteNotificationRequest = {
-  notificationId: string;
-};
+export const NotificationsPaginated = types.model({
+    ...PaginatedSchemaBase,
+    results: types.array(Notification),
+})
+
+export interface NotificationsPaginatedType extends Instance<typeof NotificationsPaginated> { }

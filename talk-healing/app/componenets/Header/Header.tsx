@@ -1,16 +1,28 @@
 'use client';
 
 import { useKBar } from 'kbar';
-import { useState } from 'react';
-import { IconBell, IconMenu2, IconX } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { IconMenu2, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import NotificationModal from '../Modals/Notification/NotificationModal';
+
+// Pull the auth flag from your existing MST store
+import { useStores } from '@/models';
+// If you want a profile dropdown like the old header, import your component:
+// import { ProfileSection } from '../ProfileSection/ProfileSection'; // adjust the path if needed
 
 export default function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { query } = useKBar();
+
+  // Store + mounted guard to avoid hydration mismatch on first client render
+  const { userStore } = useStores();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isLoggedIn = Boolean(userStore?.is_logged_in);
+  const isAuthed = mounted && isLoggedIn;
 
   return (
     <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
@@ -22,6 +34,7 @@ export default function Header() {
             <button
               className="md:hidden p-2 rounded hover:bg-gray-200"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
             </button>
@@ -37,7 +50,7 @@ export default function Header() {
               { name: 'Home', href: '/' },
               { name: 'Community', href: '/community' },
               { name: 'Research', href: '/research' },
-              { name: 'User', href: '/user-profile' },
+              
             ].map(({ name, href }) => (
               <Link
                 key={href}
@@ -62,19 +75,38 @@ export default function Header() {
               type="text"
               placeholder="Search..."
             />
+
+            {/* Notifications - visible for both states */}
             <NotificationModal />
-            <Link
-              href="/login"
-              className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:scale-105 hover:bg-green-600"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:scale-105 hover:bg-blue-700"
-            >
-              Sign Up
-            </Link>
+
+            {/* Auth area */}
+            {isAuthed ? (
+              <div className="flex items-center gap-4">
+                {/* If using your existing profile component from the old header, uncomment: */}
+                {/* <ProfileSection /> */}
+                <Link
+                  href="/user-profile"
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:scale-105 hover:bg-green-600"
+                >
+                  My Profile
+                </Link>
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:scale-105 hover:bg-green-600"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:scale-105 hover:bg-blue-700"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -114,21 +146,33 @@ export default function Header() {
               <NotificationModal />
             </div>
 
-            {/* Auth Buttons */}
-            <Link
-              href="/login"
-              className="block w-full text-center px-4 py-2 bg-green-500 text-white rounded-lg font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Sign Up
-            </Link>
+            {/* Auth area (mobile) */}
+            {isAuthed ? (
+              <Link
+                href="/user-profile"
+                className="px-4 py-2 bg-green-500 text-white rounded-lg font-medium hover:scale-105 hover:bg-green-600"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                My Profile
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="block w-full text-center px-4 py-2 bg-green-500 text-white rounded-lg font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         )}
       </div>
