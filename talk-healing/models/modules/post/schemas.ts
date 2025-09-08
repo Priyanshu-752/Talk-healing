@@ -1,6 +1,5 @@
 
 import { Instance, types } from 'mobx-state-tree';
-import { BaseModel } from '@/models/modules/base/schema';
 import { BaseModelSchemaBase } from '@/models/api/endpoint.types';
 
 export const FeedForum = types.model({
