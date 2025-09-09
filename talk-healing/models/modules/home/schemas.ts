@@ -34,7 +34,7 @@ export interface PostInHomeMediaSchemaType extends Instance<typeof PostInHomeMed
 
 export const PostInIdHomeData = types.model({
     id: types.maybeNull(types.string),
-    media: types.maybeNull(types.array(PostInHomeMediaSchema)), // Ensure it's an array
+   // media: types.maybeNull(types.array(PostInHomeMediaSchema)), // Ensure it's an array
     creator: types.maybeNull(CreatorSchema), // Assuming creator is a single object
     created_on: types.maybeNull(types.string),
     edited_on: types.maybeNull(types.string),

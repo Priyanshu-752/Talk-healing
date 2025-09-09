@@ -40,7 +40,7 @@ export const HomeStore = types.model({
                         ...response.data,
                         results: response.data.results.map((result: any) => ({
                             ...result,
-                            // community: result.community ? result.community.id : null, // or any other field from the community object you want to keep
+                           
                         })),
                     });
                     return ACTION_RESPONSES.success;
