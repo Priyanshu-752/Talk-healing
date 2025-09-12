@@ -34,17 +34,20 @@ export interface PostInHomeMediaSchemaType extends Instance<typeof PostInHomeMed
 
 export const PostInIdHomeData = types.model({
     id: types.maybeNull(types.string),
-   // media: types.maybeNull(types.array(PostInHomeMediaSchema)), // Ensure it's an array
-    creator: types.maybeNull(CreatorSchema), // Assuming creator is a single object
+    media: types.maybeNull(types.array(PostInHomeMediaSchema)), // Ensure it's an array
+    creator: types.maybeNull(CreatorSchema), // User who created the post
+    author: types.maybeNull(types.string), // Author ID for backward compatibility
     created_on: types.maybeNull(types.string),
     edited_on: types.maybeNull(types.string),
     _data: types.maybeNull(types.frozen()),
     content: types.maybeNull(types.string),
-    post_type: types.maybeNull(types.string),
-    community: types.maybeNull(HomeSchema),
-    comment_count: types.maybeNull(types.number),
-    like_count: types.maybeNull(types.number),
-    dislike_count: types.maybeNull(types.number),
+    title: types.maybeNull(types.string), // Add title field
+    image: types.maybeNull(types.string), // Add image field for posts
+    //post_type: types.maybeNull(types.string),
+    //community: types.maybeNull(HomeSchema),
+    //comment_count: types.maybeNull(types.number),
+   // like_count: types.maybeNull(types.number),
+    //dislike_count: types.maybeNull(types.number),
 });
 
 export interface PostInIdHomeDataType extends Instance<typeof PostInIdHomeData> { }

@@ -84,7 +84,7 @@ export default function ProfileCard() {
       </button>
 
       {/* Modal controlled by React state */}
-      <CreatePostModal opened={opened} close={close} calledAt="feeds" />
+      <CreatePostModal opened={opened} onClose={close} calledAt="feeds" />
     </div>
   );
 }

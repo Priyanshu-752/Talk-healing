@@ -46,9 +46,12 @@ export default function HomeSection({ }) {
         {/* Right Sidebar*/}
         <div className="w-full md:w-64 lg:w-80 px-4 flex-shrink-0 fixed top-[110px] right-5 h-[calc(100vh-110px)] overflow-y-auto bg-gray-50 z-10 hidden md:flex md:flex-col gap-7 ">
           {/* CreatePost visible only on md  */}
-          <div className="block">
-            <CreatePost />
-          </div>
+          
+  <CreatePost
+    onPostSuccess={() => { closeModal(); reloadPosts(); }} // Or just close the modal
+    closeAfterSuccess={true}
+  />
+
 
           {/* CommunityExplore on md  */}
           <div className="block">
