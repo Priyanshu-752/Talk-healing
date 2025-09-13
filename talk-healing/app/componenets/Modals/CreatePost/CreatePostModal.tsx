@@ -17,12 +17,18 @@ interface CreatePostModalProps {
   opened: boolean;
   onClose: () => void;
   calledAt: string;
+  communityId?: string | null;
+  communityName?: string;
+  onPostSuccess?: () => void;
 }
 
 const CreatePostModal: React.FC<CreatePostModalProps> = ({
   opened,
   onClose,
   calledAt,
+  communityId = null,
+  communityName,
+  onPostSuccess,
 }) => {
   const { communityStore } = useStores();
 
@@ -31,20 +37,37 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [mediaPreviewUrl, setMediaPreviewUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [postType, setPostType] = useState<'community' | 'individual'>('community');
 
   const isPostButtonDisabled = shareText.trim().length === 0 || isCreatingPost;
 
-  const postTypeDecider = (placeCalledFrom: string) =>
-    placeCalledFrom === 'community' ? 'Community Post' : 'Individual Post';
+  const postTypeDecider = (type: 'community' | 'individual') =>
+    type === 'community' ? 'Community Post' : 'Individual Post';
 
   const postContent = async () => {
+    // For community posts, we might need to send the community ID differently
     const attachedContentData = {
       content: shareText,
-      post_type: postTypeDecider(calledAt),
-      community: null, // No selection, post as individual or handle as required
+      post_type: postTypeDecider(postType),
+      // Try sending community as string ID when posting to community
+      ...(postType === 'community' && communityId ? { community: communityId } : { community: null }),
     };
-    await communityStore.postInCommunityContent(attachedContentData);
-    return communityStore.postInCommunityData?.id as string;
+    
+    console.log('Posting content with data:', attachedContentData);
+    console.log('Post type:', postType);
+    console.log('Community ID:', communityId);
+    console.log('Full request data:', JSON.stringify(attachedContentData, null, 2));
+    
+    const result = await communityStore.postInCommunityContent(attachedContentData);
+    
+    console.log('Post API result:', result);
+    console.log('Post response data:', communityStore.postInCommunityData);
+    
+    if (!communityStore.postInCommunityData?.id) {
+      throw new Error('Failed to create post - no ID returned');
+    }
+    
+    return communityStore.postInCommunityData.id as string;
   };
 
   const createMediaFormData = (postedContentId: string) => {
@@ -113,11 +136,30 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
         const mediaFormData = createMediaFormData(communityContentId);
         await postMedia(mediaFormData);
       }
+      
+      // Clear form data
       setShareText('');
       setForumMediaData(null);
       setMediaPreviewUrl(null);
-      onClose();
-      window.location.reload();
+      
+      // Reset file input
+      const fileInput = document.getElementById('media-upload') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
+      
+      console.log('Post created successfully, triggering refresh...');
+      
+      // Call onPostSuccess if provided (for auto refresh), otherwise close modal and reload
+      if (onPostSuccess) {
+        await onPostSuccess();
+      } else {
+        onClose();
+        // Small delay before reload to ensure API has processed the request
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
     } catch (error) {
       console.error('Error creating post:', error);
       setErrorMessage('Failed to create post. Please try again.');
@@ -140,7 +182,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
         <DialogHeader>
           <DialogTitle>Create a Post</DialogTitle>
           <DialogDescription>
-            Share your thoughts.
+            Share your thoughts {communityName ? `with ${communityName}` : ''}.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-3 mt-4">
@@ -149,9 +191,38 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
               {errorMessage}
             </div>
           )}
+
+          {/* Post Type Selector */}
+          {communityId && (
+            <div className="flex gap-2 mb-3">
+              <button
+                type="button"
+                onClick={() => setPostType('community')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  postType === 'community'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Post to {communityName || 'Community'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPostType('individual')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  postType === 'individual'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Post to Your Feed
+              </button>
+            </div>
+          )}
+
           <textarea
             className="w-full p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base placeholder-gray-500"
-            placeholder="What's happening?!"
+            placeholder={postType === 'community' ? `Share with ${communityName || 'the community'}...` : "What's happening?!"}
             rows={4}
             value={shareText}
             onChange={(e) => setShareText(e.target.value)}

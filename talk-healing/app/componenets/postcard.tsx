@@ -5,27 +5,37 @@ import React, { useEffect, useState } from "react";
 import { useStores } from "@/models";
 import { Images } from "@/public";
 
-export default function PostCard() {
+interface PostCardProps {
+  postData?: any; // Single post data when used in community
+  showMultiplePosts?: boolean; // Whether to show multiple posts (default behavior)
+}
+
+export default function PostCard({ postData, showMultiplePosts = true }: PostCardProps) {
   const { homeStore } = useStores();
   const [loading, setLoading] = useState(true);
 
-  // Fetch posts on load
+  // Fetch posts on load only if we're showing multiple posts and no single post data is provided
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        await homeStore.getPostInIdHomeData();
-      } catch (err) {
-        console.error("Error fetching posts:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, [homeStore]);
+    if (showMultiplePosts && !postData) {
+      const fetchPosts = async () => {
+        try {
+          await homeStore.getPostInIdHomeData();
+        } catch (err) {
+          console.error("Error fetching posts:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchPosts();
+    } else {
+      setLoading(false);
+    }
+  }, [homeStore, postData, showMultiplePosts]);
 
-  const posts = homeStore.postInIdHomeData?.results || [];
+  // Determine which posts to display
+  const posts = postData ? [postData] : (homeStore.postInIdHomeData?.results || []);
 
-  if (loading) {
+  if (loading && showMultiplePosts && !postData) {
     return <div className="p-4 text-center text-gray-500">Loading posts...</div>;
   }
 

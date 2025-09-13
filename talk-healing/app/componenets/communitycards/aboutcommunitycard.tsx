@@ -5,12 +5,18 @@ interface AboutCommunityCardProps {
   communityName: string;
   description: string;
   memberCount: number;
+  communityImage?: string;
+  createdDate?: string;
+  communityType?: string;
 }
 
 export default function AboutCommunityCard({
   communityName,
   description,
   memberCount,
+  communityImage,
+  createdDate,
+  communityType = 'General',
 }: AboutCommunityCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-md p-4 flex flex-col gap-2">
@@ -20,25 +26,30 @@ export default function AboutCommunityCard({
         <span className="text-xl text-gray-900">About this community</span>
       </div>
       <div className="border-t border-gray-200 my-2"></div>
-      <div className='text-gray-600'><h1>Asthma Session 2025</h1>
-      <p>Created Oct 29 2009</p></div>
+      <div className='text-gray-600'>
+        <h1>{communityName} Community</h1>
+        <p>Created {createdDate || 'recently'}</p>
+        <p>Type: {communityType}</p>
+      </div>
       
       {/* Stats Section */}
       <div className="flex justify-around border-y border-gray-200 py-4 text-center">
         <div className="flex-1">
-          <div className="mb-1 text-xl font-bold text-gray-900">811k</div>
-          <div className="text-xs text-gray-500">Members</div>
+          <div className="mb-1 text-xl font-bold text-gray-900">{memberCount}</div>
+          <div className="text-xs text-gray-500">Posts</div>
         </div>
         <div className="flex-1">
           <div className="mb-1 flex items-center justify-center text-xl font-bold text-gray-900">
             <span className="mr-2 h-3.5 w-3.5 rounded-full bg-green-500"></span>
-            1.6k
+            {Math.floor(memberCount / 10)}
           </div>
-          <div className="text-xs text-gray-500">Socializing</div>
+          <div className="text-xs text-gray-500">Active</div>
         </div>
         <div className="flex-1">
-          <div className="mb-1 text-xl font-bold text-gray-900">Top 1%</div>
-          <div className="text-xs text-gray-500">Ranked By Size</div>
+          <div className="mb-1 text-xl font-bold text-gray-900">
+            {memberCount > 50 ? 'Top 10%' : 'Growing'}
+          </div>
+          <div className="text-xs text-gray-500">Community Rank</div>
         </div>
       </div>
       <div className="mt-4">
@@ -51,10 +62,8 @@ export default function AboutCommunityCard({
         </ul>
       </div>
       <div className="flex items-center justify-between mt-4">
-        <span className="text-gray-600 text-sm">100+Members</span>
-        
+        <span className="text-gray-600 text-sm">{memberCount}+ Posts</span>
       </div>
-      <div><CreatePostModal/></div>
     </div>
   );
 }

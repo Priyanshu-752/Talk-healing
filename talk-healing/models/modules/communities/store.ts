@@ -86,15 +86,21 @@ postCommunity: flow(function* (data: FormData) {
           }),
 
         postInCommunityContent: flow(function* (data: { [key: string]: any }) {
+            console.log('Store: Sending post data to API:', data);
             const response = yield self.environment.api.call(API_ENDPOINTS.postInCommunity, data);
+            console.log('Store: API response status:', response.status);
+            console.log('Store: API response data:', response.data);
+            
             switch (response.status) {
                 case 201:
                     self.postInCommunityData = CommunitySchema.PostInCommunityContentSchema.create(response.data);
+                    console.log('Store: Post created successfully:', self.postInCommunityData);
                     return ACTION_RESPONSES.success;
                 case 400:
+                    console.error('Store: Bad request error:', response.data);
                     return ACTION_RESPONSES.failure;
                 default:
-                    console.error('UNHANDLED ERROR');
+                    console.error('Store: UNHANDLED ERROR', response.status, response.data);
                     break;
             }
 

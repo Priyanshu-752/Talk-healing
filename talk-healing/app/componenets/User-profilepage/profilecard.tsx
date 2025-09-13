@@ -78,7 +78,7 @@ export default function ProfileCard() {
       <button
         type="button"
         onClick={open}
-        className="w-full bg-black text-white rounded-xl py-2.5 font-semibold hover:bg-gray-900"
+        className="w-full bg-green-500 text-white rounded-xl py-2.5 font-semibold hover:bg-green-600"
       >
         Create Post
       </button>

@@ -1,14 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/app/componenets/Header/Header';
 import TopicsCard from '@/app/componenets/topicscards/topics';
-import CreatePost from '@/app/componenets/createpost/createpost';
+import CreatePostModal from '@/app/componenets/Modals/CreatePost/CreatePostModal';
 import CommunityExplore from '@/app/componenets/communitycards/community';
 import PostCard from '@/app/componenets/postcard';
 import TopicsMobile from '@/app/componenets/topicscards/topicsmobile';
+import { BsImage } from 'react-icons/bs';
 
 export default function HomeSection({ }) {
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
+
+  const openCreatePostModal = () => setIsCreatePostModalOpen(true);
+  const closeCreatePostModal = () => setIsCreatePostModalOpen(false);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
@@ -35,7 +41,30 @@ export default function HomeSection({ }) {
         */}
           {/* CreatePost on mobile */}
           <div className="block md:hidden mt-0">
-            <CreatePost />
+            <div className="bg-white text-gray-800 p-4 border border-gray-200 rounded-lg shadow-sm w-full">
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <div
+                    className="bg-transparent w-full focus:outline-none resize-none text-xl placeholder-gray-500 cursor-pointer py-3 px-2 border border-gray-300 rounded-lg"
+                    onClick={openCreatePostModal}
+                  >
+                    Share your thoughts...
+                  </div>
+                  <div className="border-t border-gray-200 my-5"></div>
+                  <div className="flex justify-between items-center">
+                    <div className="flex space-x-1 text-blue-500">
+                      <button 
+                        type="button"
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                        onClick={openCreatePostModal}
+                      >
+                        <BsImage size={20} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Post Cards */}
@@ -46,12 +75,39 @@ export default function HomeSection({ }) {
         {/* Right Sidebar*/}
         <div className="w-full md:w-64 lg:w-80 px-4 flex-shrink-0 fixed top-[110px] right-5 h-[calc(100vh-110px)] overflow-y-auto bg-gray-50 z-10 hidden md:flex md:flex-col gap-7 ">
           {/* CreatePost visible only on md  */}
-          
-  <CreatePost
-    onPostSuccess={() => { closeModal(); reloadPosts(); }} // Or just close the modal
-    closeAfterSuccess={true}
-  />
-
+          <div className="bg-white text-gray-800 p-4 border border-gray-200 rounded-lg shadow-sm w-full">
+            <div className="flex space-x-4">
+              <div className="flex-1">
+                <div
+                  className="bg-transparent w-full focus:outline-none resize-none text-xl placeholder-gray-500 cursor-pointer py-3 px-2 border border-gray-300 rounded-lg"
+                  onClick={openCreatePostModal}
+                >
+                  Share your thoughts...
+                </div>
+                <div className="border-t border-gray-200 my-5"></div>
+                <div className="flex justify-between items-center">
+                  <div className="flex space-x-1 text-blue-500">
+                    <button 
+                      type="button"
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 cursor-pointer"
+                      onClick={openCreatePostModal}
+                    >
+                      <BsImage size={20} />
+                    </button>
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      className="px-5 py-2 rounded-full font-bold transition-colors duration-200 bg-blue-500 text-white hover:bg-blue-600"
+                      onClick={openCreatePostModal}
+                      type="button"
+                    >
+                      Post
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* CommunityExplore on md  */}
           <div className="block">
@@ -60,6 +116,13 @@ export default function HomeSection({ }) {
         </div>
 
       </div>
+
+      {/* CreatePost Modal */}
+      <CreatePostModal
+        opened={isCreatePostModalOpen}
+        onClose={closeCreatePostModal}
+        calledAt="feeds"
+      />
     </div>
   );
 }   
