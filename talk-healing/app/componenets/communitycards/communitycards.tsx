@@ -33,7 +33,7 @@ const CommunityCards: React.FC<CommunityCardsProps> = observer(({
   const { userStore } = useStores();
   const [followLoading, setFollowLoading] = useState(false);
 
-  const currentUserId = userStore.loggedInUserData?.id;
+  const currentUserId = userStore.loggedInUserData?.user?.id;
   // Robustly detect MST array, normal array, or fallback
   const memberCount = (() => {
     if (Array.isArray(members)) return members.length;
@@ -93,7 +93,7 @@ const CommunityCards: React.FC<CommunityCardsProps> = observer(({
                   className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
                   type="button"
                 >
-                  📝 Create Post
+                  Create Post
                 </Button>
               ) : (
                 // Show Follow/Unfollow button for other users

@@ -107,6 +107,7 @@ const CommunityPage = observer(() => {
           }}
           communityId={selectedCommunityId}
           onPostSuccess={handlePostSuccess}
+          calledAt="community"
         />
       )}
     </div>
