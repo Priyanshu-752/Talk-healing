@@ -8,6 +8,7 @@ export const CommunitySchema = types.model({
     member: types.array(types.array(types.string)),
     community_name: types.string,
     community_img: types.string,
+    author: types.maybeNull(types.string), // Author/creator of the community
     // created_on: types.maybeNull(types.string),
 });
 export interface CommunitySchemaType extends Instance<typeof CommunitySchema> { }

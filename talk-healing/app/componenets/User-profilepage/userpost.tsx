@@ -4,21 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/models';
 import { Images } from '@/public';
-import { FaRegComment } from 'react-icons/fa';
-import { IoHeartOutline } from 'react-icons/io5';
 import { FiMoreHorizontal } from 'react-icons/fi';
+import ActionBar from '../actionbar/actionbar';
 import Link from 'next/link';
 
-interface CommentCardProps {
-  maxComments?: number; // Limit the number of comments to display
+interface UserPostProps {
+  maxPosts?: number; // Limit the number of posts to display
   showHeader?: boolean; // Whether to show the section header
 }
 
-const CommentCard: React.FC<CommentCardProps> = observer(({ 
-  maxComments, 
+const UserPost: React.FC<UserPostProps> = observer(({ 
+  maxPosts, 
   showHeader = true 
 }) => {
-  const { communityStore, userStore } = useStores();
+  const { homeStore, userStore } = useStores();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +25,7 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
   const loggedInUserId = loggedInUser?.id;
 
   useEffect(() => {
-    const fetchUserComments = async () => {
+    const fetchUserPosts = async () => {
       if (!loggedInUserId) {
         setError('No logged-in user found');
         setLoading(false);
@@ -37,34 +36,30 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
         setLoading(true);
         setError(null);
         
-        // Fetch all comments and then filter for current user
-        await communityStore.getCommentsFeed();
+        // Fetch all posts and then filter for current user
+        await homeStore.getPostInIdHomeData();
         
       } catch (err) {
-        console.error('Error fetching user comments:', err);
-        setError('Failed to load comments');
+        console.error('Error fetching user posts:', err);
+        setError('Failed to load posts');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserComments();
-  }, [communityStore, loggedInUserId]);
+    fetchUserPosts();
+  }, [homeStore, loggedInUserId]);
 
-  // Filter comments to show only the logged-in user's comments
-  const allComments = communityStore.feedComments?.results || [];
-  const userComments = allComments.filter(comment => {
-    // Check if the comment user matches the logged-in user
-    if (typeof comment.user === 'string') {
-      return comment.user === loggedInUserId;
-    } else if (comment.user && typeof comment.user === 'object') {
-      return comment.user.id === loggedInUserId;
-    }
-    return false;
+  // Filter posts to show only the logged-in user's posts
+  const allPosts = homeStore.postInIdHomeData?.results || [];
+  const userPosts = allPosts.filter(post => {
+    // Check if the post creator matches the logged-in user
+    return post.creator?.id === loggedInUserId || 
+           post.author === loggedInUserId;
   });
 
-  // Limit comments if maxComments is specified
-  const displayComments = maxComments ? userComments.slice(0, maxComments) : userComments;
+  // Limit posts if maxPosts is specified
+  const displayPosts = maxPosts ? userPosts.slice(0, maxPosts) : userPosts;
 
   if (loading) {
     return (
@@ -72,9 +67,9 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
         <div className="animate-pulse space-y-4">
           <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
           <div className="space-y-3">
-            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
         </div>
       </div>
@@ -85,7 +80,7 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
     return (
       <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
         <div className="text-red-500 text-center py-4">
-          <p className="font-medium">Error loading comments</p>
+          <p className="font-medium">Error loading posts</p>
           <p className="text-sm text-gray-500 mt-1">{error}</p>
         </div>
       </div>
@@ -96,25 +91,25 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
     return (
       <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
         <div className="text-gray-500 text-center py-4">
-          <p>Please log in to view your comments.</p>
+          <p>Please log in to view your posts.</p>
         </div>
       </div>
     );
   }
 
-  if (displayComments.length === 0) {
+  if (displayPosts.length === 0) {
     return (
       <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-6">
         {showHeader && (
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-black dark:text-white">Your Comments</h3>
-            <p className="text-sm text-gray-500">Comments you've posted</p>
+            <h3 className="text-lg font-semibold text-black dark:text-white">Your Posts</h3>
+            <p className="text-sm text-gray-500">Posts you've created</p>
           </div>
         )}
         <div className="text-gray-500 text-center py-8">
-          <div className="text-4xl mb-2">💬</div>
-          <p className="font-medium">No comments yet</p>
-          <p className="text-sm mt-1">Your comments will appear here once you start engaging.</p>
+          <div className="text-4xl mb-2">📝</div>
+          <p className="font-medium">No posts yet</p>
+          <p className="text-sm mt-1">Your posts will appear here once you start sharing.</p>
         </div>
       </div>
     );
@@ -126,10 +121,10 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-lg font-semibold text-black dark:text-white">Your Comments</h3>
-              <p className="text-sm text-gray-500">{userComments.length} comment{userComments.length !== 1 ? 's' : ''}</p>
+              <h3 className="text-lg font-semibold text-black dark:text-white">Your Posts</h3>
+              <p className="text-sm text-gray-500">{userPosts.length} post{userPosts.length !== 1 ? 's' : ''}</p>
             </div>
-            {maxComments && userComments.length > maxComments && (
+            {maxPosts && userPosts.length > maxPosts && (
               <Link 
                 href="/user-profile" 
                 className="text-blue-500 hover:text-blue-600 text-sm font-medium"
@@ -142,9 +137,9 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
       )}
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        {displayComments.map((comment, index) => (
-          <div key={comment.id || index} className="p-4">
-            {/* Comment Header */}
+        {displayPosts.map((post, index) => (
+          <div key={post.id || index} className="p-4">
+            {/* Post Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <img
@@ -163,6 +158,11 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
                   <p className="text-gray-500 text-xs">
                     @{loggedInUser.id || "you"}
                   </p>
+                  {post.created_on && (
+                    <p className="text-xs text-gray-400">
+                      {new Date(post.created_on).toLocaleDateString()}
+                    </p>
+                  )}
                 </div>
               </div>
               <button className="text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-1.5 transition-colors">
@@ -170,50 +170,63 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
               </button>
             </div>
 
-            {/* Comment Content */}
+            {/* Post Content */}
             <div className="mb-3">
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
+              {post.title && (
+                <h4 className="font-semibold text-black dark:text-white mb-1">
+                  {post.title}
+                </h4>
+              )}
+              {post.content && (
                 <p className="text-black dark:text-white text-sm leading-relaxed">
-                  {comment.content}
+                  {post.content}
                 </p>
-              </div>
+              )}
             </div>
 
-            {/* Post Reference (if available) */}
-            {comment.community_post && (
-              <div className="mb-3">
-                <Link 
-                  href={`/postdetailpage/${comment.community_post}`}
-                  className="text-xs text-blue-500 hover:text-blue-600 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-full inline-block"
-                >
-                  View original post →
-                </Link>
-              </div>
+            {/* Post Media */}
+            {(post.image || (post.media && post.media.length > 0)) && (
+              <Link href={`/postdetailpage/${post.id}`} className="block mb-3">
+                <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.title || "Post image"}
+                      className="w-full max-h-64 object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  ) : post.media && post.media.length > 0 && (post.media[0].image || post.media[0].media) && (
+                    <img
+                      src={post.media[0].image || post.media[0].media || ""}
+                      alt={post.title || "Post media"}
+                      className="w-full max-h-64 object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  )}
+                </div>
+              </Link>
             )}
 
-            {/* Comment Actions */}
-            <div className="flex items-center gap-4 text-gray-500">
-              <button className="flex items-center gap-1 hover:text-blue-500 text-xs transition-colors">
-                <FaRegComment size={12} />
-                <span>Reply</span>
-              </button>
-              <button className="flex items-center gap-1 hover:text-pink-500 text-xs transition-colors">
-                <IoHeartOutline size={14} />
-                <span>Like</span>
-              </button>
+            {/* Post Actions */}
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
+              <ActionBar />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Load More Button (if there are more comments) */}
-      {maxComments && userComments.length > maxComments && (
+      {/* Load More Button (if there are more posts) */}
+      {maxPosts && userPosts.length > maxPosts && (
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
           <Link 
             href="/user-profile"
             className="block w-full text-center py-2 px-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors"
           >
-            View All {userComments.length} Comments
+            View All {userPosts.length} Posts
           </Link>
         </div>
       )}
@@ -221,4 +234,4 @@ const CommentCard: React.FC<CommentCardProps> = observer(({
   );
 });
 
-export default CommentCard;
+export default UserPost;

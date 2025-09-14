@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import PostCard from "../postcard";
 import CommentCard from "./commentcard";
+import UserPost from "./userpost";
 
 export default function UserProfileActivityTab({ }) {
     return(
@@ -10,9 +10,10 @@ export default function UserProfileActivityTab({ }) {
     <TabsTrigger value="Comments">Comments</TabsTrigger>
     <TabsTrigger value="Saves">Saves</TabsTrigger>
   </TabsList>
-  <TabsContent value="Posts"><PostCard/></TabsContent>
-  <TabsContent className="flex flex-col gap-5" value="Comments"><CommentCard/>
-  <CommentCard/></TabsContent>
+  <TabsContent value="Posts"><UserPost showHeader={false} /></TabsContent>
+  <TabsContent className="flex flex-col gap-5" value="Comments">
+    <CommentCard showHeader={false} />
+  </TabsContent>
   <TabsContent value="Saves">No saves avaialable here.</TabsContent>
 </Tabs>
     );

@@ -6,6 +6,7 @@ import ProfileCard from '@/app/componenets/User-profilepage/profilecard';
 import SettingsCard from '@/app/componenets/User-profilepage/settingscard';
 import UserProfileActivityTab from '@/app/componenets/User-profilepage/userprofiletabs';
 
+
 export default function UserProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '@/app/componenets/Header/Header';
 import CommunityCards from '@/app/componenets/communitycards/communitycards';
 import CreateCommunityModal from '@/app/componenets/Modals/CreateCommunity/CreateCommunityModal';
+import CreatePostModal from '@/app/componenets/Modals/CreatePost/CreatePostModal';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/models';
 import { Images } from '@/public';
@@ -11,6 +12,8 @@ import { Images } from '@/public';
 const CommunityPage = observer(() => {
   const { communityStore } = useStores();
   const [showModal, setShowModal] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
+  const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
   const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
@@ -25,6 +28,18 @@ const CommunityPage = observer(() => {
   const handleCommunityCreated = () => {
     communityStore.getCommunity();
     setShowModal(false);
+  };
+
+  const handleCreatePost = (communityId: string) => {
+    setSelectedCommunityId(communityId);
+    setShowCreatePostModal(true);
+  };
+
+  const handlePostSuccess = () => {
+    // Refresh communities data if needed
+    communityStore.getCommunity();
+    setShowCreatePostModal(false);
+    setSelectedCommunityId(null);
   };
 
   return (
@@ -58,9 +73,12 @@ const CommunityPage = observer(() => {
                 filteredData.map((community) => (
                   <CommunityCards
                     key={community.id}
+                    communityId={community.id}
                     title={community.community_name}
                     image={community.community_img || Images.communityCardImage}
                     members={community.member} // can be string or array
+                    creatorId={community.author || undefined}
+                    onCreatePost={handleCreatePost}
                     // showButtons={true} // uncomment if you want to force 'Join' etc.
                   />
                 ))
@@ -72,12 +90,25 @@ const CommunityPage = observer(() => {
 
       {/* Modal - pass callback for after create */}
       {showModal && (
-  <CreateCommunityModal
-    opened={showModal}
-    onClose={() => setShowModal(false)}
-    onCommunityCreated={handleCommunityCreated}
-  />
-)}
+        <CreateCommunityModal
+          opened={showModal}
+          onClose={() => setShowModal(false)}
+          onCommunityCreated={handleCommunityCreated}
+        />
+      )}
+
+      {/* CreatePost Modal */}
+      {showCreatePostModal && selectedCommunityId && (
+        <CreatePostModal
+          opened={showCreatePostModal}
+          onClose={() => {
+            setShowCreatePostModal(false);
+            setSelectedCommunityId(null);
+          }}
+          communityId={selectedCommunityId}
+          onPostSuccess={handlePostSuccess}
+        />
+      )}
     </div>
   );
 });
