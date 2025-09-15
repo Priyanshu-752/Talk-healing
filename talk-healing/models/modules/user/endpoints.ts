@@ -78,4 +78,28 @@ export const API_ENDPOINTS = {
         response: null,
         transformer: null,
     }),
+    loginGoogle: new API_ENDPOINT({
+        url: "/social-auth/google/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: TRANSFORMERS.userPaginatedTransformer,
+       }),
+       loginFacebook: new API_ENDPOINT({
+        url: "/social-auth/facebook/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: TRANSFORMERS.userPaginatedTransformer,
+    }),
+     verifyEmail: new API_ENDPOINT({
+        url: "/auth/registration/verify-email/",
+        method: REQUEST_METHOD.POST,
+        response: null,
+        transformer: TRANSFORMERS.userPaginatedTransformer,
+    }),
+    resendVerificationEmail: new API_ENDPOINT({
+        url: "/base_user/verify-email/resend/",
+        method: REQUEST_METHOD.GET,
+        response: null,
+        transformer: TRANSFORMERS.userPaginatedTransformer,
+    }),
 }

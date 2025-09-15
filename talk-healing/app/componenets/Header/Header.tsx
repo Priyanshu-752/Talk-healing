@@ -113,6 +113,15 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden mt-2 px-2 pb-4 space-y-3">
+            {/* Mobile Search */}
+            <input
+              readOnly
+              onClick={() => query.toggle()}
+              className="block w-full px-4 py-2 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
+              type="text"
+              placeholder="Search..."
+            />
+
             {[
               { name: 'Home', href: '/' },
               { name: 'Community', href: '/community' },
@@ -121,7 +130,7 @@ export default function Header() {
               <Link
                 key={href}
                 href={href}
-                className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`block px-30 py-2 rounded-md text-sm font-medium transition-colors ${
                   pathname === href
                     ? 'bg-blue-50 text-blue-600'
                     : 'text-gray-700 hover:text-blue-600'
@@ -131,15 +140,6 @@ export default function Header() {
                 {name}
               </Link>
             ))}
-
-            {/* Mobile Search */}
-            <input
-              readOnly
-              onClick={() => query.toggle()}
-              className="block w-full px-4 py-2 rounded-full border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-              type="text"
-              placeholder="Search..."
-            />
 
             {/* Notification */}
             <div className="pt-2">

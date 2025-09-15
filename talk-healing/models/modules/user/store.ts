@@ -163,5 +163,58 @@ export const UserStore = types
         return { ...ACTION_RESPONSES.failure, error: e?.message || 'Reset confirm failed' };
       }
     }),
+
+    verifyEmailOtp: flow(function* (email: string, otp: string) {
+      try {
+        const response = yield self.environment.api.call(
+          API_ENDPOINTS.verifyEmail,
+          { 
+            email: email,
+            verification_code: otp 
+          }
+        );
+
+        switch (response.status) {
+          case 200:
+            console.log('OTP verification successful');
+            return ACTION_RESPONSES.success;
+          case 400:
+            console.error('OTP verification failed: Bad data');
+            return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };
+          case 404:
+            return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };
+          default:
+            console.error('UNHANDLED ERROR', response);
+            return ACTION_RESPONSES.failure;
+        }
+      } catch (error) {
+        console.error('OTP verification error:', error);
+        return ACTION_RESPONSES.failure;
+      }
+    }),
+
+    resendOtp: flow(function* (email: string) {
+      try {
+        const response = yield self.environment.api.call(
+          API_ENDPOINTS.resendVerificationEmail,
+          { email: email }
+        );
+
+        switch (response.status) {
+          case 200:
+            console.log('OTP resent successfully');
+            return ACTION_RESPONSES.success;
+          case 400:
+            console.error('OTP resend failed: Bad data');
+            return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };
+          default:
+            console.error('UNHANDLED ERROR', response);
+            return ACTION_RESPONSES.failure;
+        }
+      } catch (error) {
+        console.error('OTP resend error:', error);
+        return ACTION_RESPONSES.failure;
+      }
+    }),
   }));
 

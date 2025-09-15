@@ -30,9 +30,9 @@ export default function UserProfilePage() {
           </div>
 
           {/* Activity tab*/}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Activities</h2>
-            <div>
+          <div className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Activities</h2>
+            <div className="w-full">
               <UserProfileActivityTab />
             </div>
           </div>

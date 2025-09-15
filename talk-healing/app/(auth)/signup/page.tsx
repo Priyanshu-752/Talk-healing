@@ -87,9 +87,9 @@ export default function SignUpSection() {
                 console.log('Signup successful');
                 setSignupSuccess(true);
                 
-                // Redirect to login page after successful signup
+                // Redirect to verify-email page after successful signup
                 setTimeout(() => {
-                    router.push('/login');
+                    router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
                 }, 2000);
             } else {
                 console.log('Signup failed, handling error...');
@@ -142,7 +142,7 @@ export default function SignUpSection() {
                     )}
                     {signupSuccess && (
                         <div className="text-green-600 text-sm text-center">
-                            Signup successful! Redirecting to login...
+                            Signup successful! Redirecting to email verification...
                         </div>
                     )}
 
