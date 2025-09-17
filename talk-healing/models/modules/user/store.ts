@@ -20,6 +20,8 @@ export const UserStore = types
     // REGISTER / SIGN UP
     signupUser: flow(function* (full_name: string, email: string, password1: string,password2: string) {
       try {
+        console.log('UserStore: Starting signup with payload:', { full_name, email, password1: '***' });
+        
         const payload = {
           full_name,
           email,
@@ -27,23 +29,41 @@ export const UserStore = types
           password2: password1, // align with your Registration model
         };
 
+        console.log('UserStore: Making API call to registration endpoint...');
         const response = yield self.environment.api.call(API_ENDPOINTS.registration, payload);
+        
+        console.log('UserStore: Raw API response:', {
+          status: response.status,
+          ok: response.ok,
+          data: response.data,
+          problem: response.problem
+        });
 
         switch (response.status) {
           case 201:
           case 200:
-            // If your API returns tokens and user, you can hydrate here like login:
-            // self.loggedInUserData = UserSchemas.LoggedInUser.create(response.data);
-            // self.is_logged_in = true;
-            // yield storage.setItem(self.environment.api.config.token_key, response.data[self.environment.api.config.token_key]);
-            return ACTION_RESPONSES.success; // { ok: true }
+            console.log('UserStore: Signup successful, response data:', response);
+            // Return success with the actual response data containing tokens and user info
+            return { 
+              response: response,
+              access: response.data.access,
+              refresh: response.data.refresh,
+              ok: true,
+              error: null,
+              code: response.status,
+              message: null,
+              data: response.data 
+            };
           case 400:
           case 422:
+            console.log('UserStore: Signup failed with validation error:', response.data);
             return { ...ACTION_RESPONSES.failure, code: response.status, error: response.data };
           default:
-            return ACTION_RESPONSES.failure;
+            console.log('UserStore: Signup failed with status:', response.status);
+            return { ...ACTION_RESPONSES.failure, code: response.status };
         }
       } catch (e: any) {
+        console.error('UserStore: Exception during signup:', e);
         return { ...ACTION_RESPONSES.failure, error: e?.message || 'Sign up failed' };
       }
     }),
@@ -170,7 +190,7 @@ export const UserStore = types
           API_ENDPOINTS.verifyEmail,
           { 
             email: email,
-            verification_code: otp 
+            otp: otp 
           }
         );
 
@@ -214,6 +234,67 @@ export const UserStore = types
       } catch (error) {
         console.error('OTP resend error:', error);
         return ACTION_RESPONSES.failure;
+      }
+    }),
+
+    // TOKEN MANAGEMENT
+    setTokens: (accessToken: string, refreshToken: string) => {
+      // Store tokens in the API configuration for future requests
+      if (accessToken) {
+        storage.setItem(self.environment.api.config.token_key, accessToken);
+      }
+      
+      // Also store refresh token if needed
+      if (refreshToken) {
+        storage.setItem('refresh_token', refreshToken);
+      }
+      
+      console.log('Tokens set in store');
+    },
+
+    setUser: (userData: any) => {
+      try {
+        // Set user data in the store if available
+        if (userData) {
+          self.loggedInUserData = UserSchemas.LoggedInUser.create({
+            user: userData,
+            access: '', // We'll set this separately
+            refresh: '' // We'll set this separately
+          });
+          self.is_logged_in = true;
+          
+          console.log('User data set in store:', userData);
+        }
+      } catch (error) {
+        console.error('Error setting user data in store:', error);
+      }
+    },
+
+    // Initialize tokens and user data from storage on app start
+    initializeFromStorage: flow(function* () {
+      try {
+        const accessToken = yield storage.getItem(self.environment.api.config.token_key);
+        const refreshToken = yield storage.getItem('refresh_token');
+        
+        if (accessToken) {
+          // Set the authorization header for future API calls
+          self.environment.api.apisauce.setHeader("Authorization", "Bearer " + accessToken);
+          console.log('Initialized access token from storage');
+        }
+        
+        if (refreshToken) {
+          console.log('Initialized refresh token from storage');
+        }
+        
+        // If we have tokens, we're likely logged in
+        if (accessToken) {
+          self.is_logged_in = true;
+        }
+        
+        return { success: true };
+      } catch (error) {
+        console.error('Error initializing from storage:', error);
+        return { success: false, error };
       }
     }),
   }));

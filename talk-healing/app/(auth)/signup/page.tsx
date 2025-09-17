@@ -73,17 +73,55 @@ export default function SignUpSection() {
         });
         
         try {
-            console.log('Calling userStore.signupUser...');
+            console.log('Frontend: Calling userStore.signupUser...');
             const response = await userStore.signupUser(
                 data.full_name,
                 data.email,
                 data.password1,
                 data.password2,
             );
-            
-            console.log('Response received:', response);
+
+            console.log('Frontend: Response received:', JSON.stringify(response, null, 2));
             
             if (response && response.ok) {
+                console.log('Frontend: Response is successful, extracting data...');
+                // Extract the actual data from the response
+                const responseData = response.data || response;
+                console.log('Frontend: Response data:', JSON.stringify(responseData, null, 2));
+                
+                // Check if we have tokens in the response data
+                if (responseData && typeof responseData === 'object') {
+                    console.log('Frontend: Checking for tokens in response data...');
+                    // Store tokens if they exist
+                    if ('access' in responseData && 'refresh' in responseData) {
+                        console.log('Frontend: Found tokens! Storing them...');
+                        localStorage.setItem("accessToken", responseData.access as string);
+                        localStorage.setItem("refreshToken", responseData.refresh as string);
+                        
+                        // Also store user data if available
+                        if ('user' in responseData) {
+                            localStorage.setItem("userData", JSON.stringify(responseData.user));
+                            console.log('Frontend: User data stored:', responseData.user);
+                        }
+                        
+                        // Set tokens in the user store
+                        if (userStore.setTokens) {
+                            console.log('Frontend: Calling userStore.setTokens...');
+                            userStore.setTokens(responseData.access as string, responseData.refresh as string);
+                        }
+                        
+                        // Set user data in the store if available
+                        if ('user' in responseData && userStore.setUser) {
+                            console.log('Frontend: Calling userStore.setUser...');
+                            userStore.setUser(responseData.user);
+                        }
+                    } else {
+                        console.log('Frontend: No tokens found in response data. Keys available:', Object.keys(responseData));
+                    }
+                } else {
+                    console.log('Frontend: Response data is not an object:', typeof responseData, responseData);
+                }
+                
                 console.log('Signup successful');
                 setSignupSuccess(true);
                 
